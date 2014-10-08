@@ -17,8 +17,6 @@ public class Main implements Runnable {
 	
 	public void init() {
 		update = new Update();
-		update.start();
-		update.pause();
 		render = new Render(GraphicsMain.getGraphics());
 		render.start();
 		render.pause();
@@ -48,15 +46,13 @@ public class Main implements Runnable {
 			boolean shouldRender = false;
 			
 			while(delta >= 1) {
-				update.resume();
+				update.update();
 				delta--;
 				shouldRender = true;
-				update.pause();
 			}
 			
 			if(shouldRender) {
 				render.resume();
-				render.pause();
 			}
 		}
 	}

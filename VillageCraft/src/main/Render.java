@@ -43,7 +43,9 @@ public class Render implements Runnable {
 			g.fillRect(0, 0, GraphicsMain.WIDTH, GraphicsMain.HEIGHT);
 			
 			g.setColor(Color.cyan);
-			g.fillRect(500 + cnt, 500, 50, 50);
+			g.fillRect(500 + Update.cnt, 500, 50, 50);
+			
+			pause();
 		}
 	}
 
