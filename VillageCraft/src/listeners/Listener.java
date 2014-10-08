@@ -1,55 +1,52 @@
 package listeners;
 
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Listener implements KeyListener, MouseListener{
+	ArrayList<InputEvent> unprocessedEvents = new ArrayList<InputEvent>();
 
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public InputEvent getEvent(int index)
+	{
+		InputEvent e = unprocessedEvents.remove(index); 
+		return e;
 	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public InputEvent peekAtEvent(int index)
+	{
+		return unprocessedEvents.get(index);
 	}
-
+	
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseClicked(MouseEvent e) {
+		unprocessedEvents.add(e);
 	}
-
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseEntered(MouseEvent e) {
+		unprocessedEvents.add(e);
 	}
-
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseExited(MouseEvent e) {
+		unprocessedEvents.add(e);
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		unprocessedEvents.add(e);
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		unprocessedEvents.add(e);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		unprocessedEvents.add(e);
 	}
-
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		unprocessedEvents.add(e);
 	}
-
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		unprocessedEvents.add(e);
 	}
-
 }
