@@ -3,17 +3,20 @@ package resources;
 import java.util.ArrayList;
 
 public class Village {
-	private int population, sizeRank;
+	private int sizeRank;
+	private ArrayList<Villager> villagers;
 	private ArrayList<Building> buildings;
 	
-	public Village(int population) {
-		this.setPopulation(population);
-		this.setSizeRank(population);
+	public Village(ArrayList<Villager> population) {
+		this.addPopulation(population);
+		this.setSizeRank(population.size());
 		buildings = new ArrayList<Building>();
 	}
 	
-	public void setPopulation(int population) {this.population = population;}
-	public int getPopulation() {return population;}
+	public void addPopulation(ArrayList<Villager> newPopulation) {
+		this.villagers.addAll(newPopulation);
+	}
+	public int getPopulation() {return villagers.size();}
 	
 	public void setSizeRank(int population) {
 		sizeRank = population/10;
