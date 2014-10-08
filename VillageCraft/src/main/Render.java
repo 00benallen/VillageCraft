@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class Render implements Runnable {
@@ -27,9 +28,7 @@ public class Render implements Runnable {
 	}
 
 	public void run() {
-		int cnt = 0;
 		while(Main.running) {
-			cnt++;
 			synchronized(this) {
 				while(waiting) {
 					try {
@@ -39,11 +38,8 @@ public class Render implements Runnable {
 					}
 				}
 			}
-			g.setColor(Color.red);
+			g.setColor(Color.magenta);
 			g.fillRect(0, 0, GraphicsMain.WIDTH, GraphicsMain.HEIGHT);
-			
-			g.setColor(Color.cyan);
-			g.fillRect(500 + Update.cnt, 500, 50, 50);
 			
 			pause();
 		}
