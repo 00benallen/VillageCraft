@@ -1,11 +1,14 @@
 package main;
 
+import resources.World;
+
 public class Main implements Runnable {
 	public static boolean running = true;
 	private static Main main;
-	Update update;
-	Render render;
-	Thread mainThread;
+	private Update update;
+	private Render render;
+	private Thread mainThread;
+	private static World world1;
 	
 	
 	public static void main(String[] args) {
@@ -17,6 +20,8 @@ public class Main implements Runnable {
 	
 	public void init() {
 		update = new Update();
+		update.init();
+		world1 = update.getWorld1();
 		render = new Render(GraphicsMain.getGraphics());
 		render.start();
 		render.pause();
@@ -55,5 +60,9 @@ public class Main implements Runnable {
 				render.resume();
 			}
 		}
+	}
+	
+	public static World getWorld1() {
+		return world1;
 	}
 }

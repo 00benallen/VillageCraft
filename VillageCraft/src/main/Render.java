@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import resources.World;
+
 public class Render implements Runnable {
 	Graphics2D g;
 	Thread renderThread;
@@ -38,11 +40,20 @@ public class Render implements Runnable {
 					}
 				}
 			}
-			g.setColor(Color.magenta);
-			g.fillRect(0, 0, GraphicsMain.WIDTH, GraphicsMain.HEIGHT);
 			
+			drawGround();
 			pause();
 		}
 	}
-
+	
+	public void drawGround() {
+		g.setColor(new Color(1, 166, 17));
+		g.fillRect(0, 0, GraphicsMain.WIDTH, GraphicsMain.HEIGHT);
+	}
+	
+	public void drawWorld() {
+		World world1 = Main.getWorld1();
+		
+		//TODO
+	}
 }
