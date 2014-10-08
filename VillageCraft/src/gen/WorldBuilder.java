@@ -33,25 +33,20 @@ public class WorldBuilder {
 				String[] splitLine = line.split(" ");
 				int x = Integer.parseInt(splitLine[1]);
 				int y = Integer.parseInt(splitLine[2]);
-				chunks.add(new Chunk(x, y, rand.nextInt(4), true, false));
+				//chunks.set((x + y)*size, new Chunk(rand.nextInt(4), true, false ));
 			}
-			else if(line.charAt(0) == 'V') {
+			else if(line.charAt(0) == 'P') {
 				String[] splitLine = line.split(" ");
 				int x = Integer.parseInt(splitLine[1]);
 				int y = Integer.parseInt(splitLine[2]);
-				chunks.add(new Chunk(x, y, rand.nextInt(4), true, true));
+				//chunks.set((x + y)*size, new Chunk(rand.nextInt(4), true, true));
 			}
 		}
 		
-		for(int i = 0; i < size; i++) {
-			for(int  j = 0; j < size; j++) {
-				if(chunks.get(i) == null) { 
-					chunks.add(new Chunk(i, j, rand.nextInt(4), false, false));
-				}
-			}
+		for(int i = 0; i < size*size; i++) {
+			chunks.add(new Chunk(rand.nextInt(4), true, true));
 		}
-
-		
+			
 		World world = new World(size);
 		world.setChunks(chunks);
 		return world;

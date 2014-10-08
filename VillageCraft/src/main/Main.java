@@ -45,6 +45,7 @@ public class Main implements Runnable {
 		init();
 		
 		while(running) {
+			
 			long now = System.nanoTime();
 			delta += (now - lastTime) / nanoPerUpdate;
 			lastTime = now;

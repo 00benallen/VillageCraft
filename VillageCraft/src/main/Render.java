@@ -32,7 +32,7 @@ public class Render implements Runnable {
 	public void run() {
 		while(Main.running) {
 			synchronized(this) {
-				while(waiting) {
+				if(waiting) {
 					try {
 						wait();
 					} catch (InterruptedException e) {
