@@ -4,6 +4,8 @@ public class Villager {
 	private boolean adult, alive;
 	private int proffession, health, hunger, thirst, tool, armor;
 	
+	public static final int PROF_UNEMPLOYED = 0, PROF_MAYOR = 1;
+	
 	public Villager() {
 		this.setAdult(true);
 		this.setAlive(true);
