@@ -4,13 +4,10 @@ import java.util.ArrayList;
 
 public class World {
 	
-	private ArrayList<Chunk> chunks;
-	private int size;
+	private ArrayList<Chunk> chunks;	
 	
-	
-	public World(int size) {
-		chunks = new ArrayList<Chunk>();
-		this.setSize(size);
+	public World(ArrayList<Chunk> chunks) {
+		this.chunks = chunks;
 	}
 	
 	public Chunk getChunk(int index) {
@@ -27,11 +24,6 @@ public class World {
 	}
 
 	public int getSize() {
-		return size;
+		return (int)Math.sqrt(chunks.size());
 	}
-
-	public void setSize(int size) {
-		this.size = size;
-	}
-
 }

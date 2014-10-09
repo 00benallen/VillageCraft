@@ -47,8 +47,7 @@ public class WorldBuilder {
 			chunks.add(new Chunk(rand.nextInt(4), true, true));
 		}
 			
-		World world = new World(size);
-		world.setChunks(chunks);
+		World world = new World(chunks);
 		return world;
 	}
 
