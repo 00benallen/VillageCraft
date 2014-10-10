@@ -1,6 +1,6 @@
 package main;
 
-import resources.World;
+import world.World;
 import gen.WorldBuilder;
 
 public class Update {

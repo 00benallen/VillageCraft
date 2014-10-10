@@ -1,6 +1,8 @@
-package resources;
+package world;
 
 import java.util.ArrayList;
+
+import resources.Villager;
 
 public class Village extends Chunk{
 	private int sizeRank;

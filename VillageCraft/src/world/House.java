@@ -1,4 +1,4 @@
-package resources;
+package world;
 
 public class House extends Building {
 	private int people;

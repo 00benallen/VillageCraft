@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-import resources.Chunk;
-import resources.Village;
 import resources.Villager;
-import resources.World;
+import world.Chunk;
+import world.Village;
+import world.World;
 
 public class WorldBuilder {
 	public static World generateWorld(String fileName) {

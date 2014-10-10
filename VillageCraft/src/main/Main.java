@@ -1,6 +1,6 @@
 package main;
 
-import resources.World;
+import world.World;
 
 public class Main implements Runnable {
 	public static boolean running = true;

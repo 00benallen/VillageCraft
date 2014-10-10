@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import resources.World;
+import world.World;
 
 public class Render implements Runnable {
 	Graphics2D g;

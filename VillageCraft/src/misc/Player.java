@@ -1,4 +1,4 @@
-package resources;
+package misc;
 
 public class Player {
 

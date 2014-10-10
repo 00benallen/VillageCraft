@@ -1,4 +1,4 @@
-package resources;
+package world;
 
 import java.util.ArrayList;
 

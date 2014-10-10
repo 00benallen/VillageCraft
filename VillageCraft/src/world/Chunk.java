@@ -1,6 +1,8 @@
-package resources;
+package world;
 
 import java.util.ArrayList;
+
+import resources.Material;
 
 public class Chunk {
 	private int biome;
