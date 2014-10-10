@@ -13,6 +13,7 @@ public class Chunk {
 	
 	//TODO decide what to make this
 	public static final int initResources = 0;
+	
 	public Chunk(int biome) {
 		this.setBiome(biome);
 	}
