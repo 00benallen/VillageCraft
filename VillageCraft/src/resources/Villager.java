@@ -2,18 +2,20 @@ package resources;
 
 public class Villager {
 	private boolean adult, alive;
-	private int proffession, health, hunger, thirst, tool, armor;
+	private int proffession, health, hunger, thirst, armor;
+	private Tool tool;
 	
+	public static final int initHealth = 20, initHunger = 20, initThirst = 20;
 	public static final int PROF_UNEMPLOYED = 0, PROF_MAYOR = 1;
 	
 	public Villager() {
 		this.setAdult(true);
 		this.setAlive(true);
 		this.setProffession(0);
-		this.setHealth(20);
-		this.setHunger(20);
-		this.setThirst(20);
-		this.setTool(0);
+		this.setHealth(initHealth);
+		this.setHunger(initHunger);
+		this.setThirst(initThirst);
+		this.setTool(null);
 		this.setArmor(0);
 	}
 
@@ -41,9 +43,9 @@ public class Villager {
 
 	public void setThirst(int thirst) {this.thirst = thirst;}
 
-	public int getTool() {return tool;}
+	public Tool getTool() {return tool;}
 
-	public void setTool(int tool) {this.tool = tool;}
+	public void setTool(Tool tool) {this.tool = tool;}
 
 	public int getArmor() {return armor;}
 
