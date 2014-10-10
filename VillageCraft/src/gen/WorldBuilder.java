@@ -7,10 +7,11 @@ import java.util.Random;
 import java.util.Scanner;
 
 import resources.Chunk;
+import resources.Village;
+import resources.Villager;
 import resources.World;
 
 public class WorldBuilder {
-	
 	public static World generateWorld(String fileName) {
 		
 		Scanner s = null;
@@ -44,9 +45,14 @@ public class WorldBuilder {
 		}
 		
 		for(int i = 0; i < size*size; i++) {
-			chunks.add(new Chunk(rand.nextInt(4), true, true));
+			chunks.add(new Chunk(rand.nextInt(4)));
 		}
-			
+		
+		int center = chunks.size()/2;
+		ArrayList<Villager> populationCenter = new ArrayList<Villager>();
+		populationCenter.add(new Villager());
+		chunks.set(center, new Village(chunks.get(center).getBiome(), populationCenter));
+		
 		World world = new World(chunks);
 		return world;
 	}

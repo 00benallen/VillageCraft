@@ -2,12 +2,13 @@ package resources;
 
 import java.util.ArrayList;
 
-public class Village {
+public class Village extends Chunk{
 	private int sizeRank;
 	private ArrayList<Villager> villagers;
 	private ArrayList<Building> buildings;
 	
-	public Village(ArrayList<Villager> population) {
+	public Village(int biome, ArrayList<Villager> population) {
+		super(biome);
 		this.addPopulation(population);
 		this.setSizeRank(population.size());
 		buildings = new ArrayList<Building>();
