@@ -13,7 +13,7 @@ public class House extends Building {
 
 	@Override
 	public int getType() {
-		return Building.TYPE_HOUSE;
+		return BuildingType.HOUSE.ordinal();
 	}
 
 }

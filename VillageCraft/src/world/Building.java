@@ -1,6 +1,8 @@
 package world;
 
 public abstract class Building {
-	public static final int TYPE_HOUSE = 0;
+	public enum BuildingType {
+		CITYHALL, HOUSE
+	}
 	public abstract int getType();
 }

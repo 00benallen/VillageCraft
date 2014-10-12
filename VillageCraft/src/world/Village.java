@@ -1,5 +1,6 @@
 package world;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import resources.Villager;
@@ -7,13 +8,29 @@ import resources.Villager;
 public class Village extends Chunk{
 	private int sizeRank;
 	private ArrayList<Villager> villagers;
-	private ArrayList<Building> buildings;
+	private Building[][] buildings;
 	
 	public Village(int biome, ArrayList<Villager> population) {
 		super(biome);
 		this.addPopulation(population);
+		//TODO Why population.size?
 		this.setSizeRank(population.size());
-		buildings = new ArrayList<Building>();
+		
+		constructBuildings();
+	}
+	
+	private void constructBuildings()
+	{
+		CityHall cityHall = new CityHall();
+
+		int sideLength = getSideLength(this.getSizeRank());
+		buildings = new Building[sideLength][sideLength];
+		
+		int x = sideLength/2 - 1, y = sideLength/2 - 1;
+		buildings[x][y] = cityHall;
+		buildings[y][x+1] = cityHall;
+		buildings[y+1][x] = cityHall;
+		buildings[y+1][x+1] = cityHall;
 	}
 	
 	public void addPopulation(ArrayList<Villager> newPopulation) {
@@ -22,18 +39,55 @@ public class Village extends Chunk{
 	public int getPopulation() {return villagers.size();}
 	
 	public void setSizeRank(int population) {
-		sizeRank = population/10;
+		int newSizeRank = population/10;
+		int minSideLength = getSideLength(Math.min(newSizeRank, sizeRank));
+		Building[][] newBuildings = new Building[getSideLength(newSizeRank)][getSideLength(newSizeRank)];
+		for (int iNew = Math.max(0, newSizeRank-sizeRank)*16, iOld = Math.max(0, sizeRank-newSizeRank)*16; iNew < minSideLength|| iOld < minSideLength; ++iNew, ++iOld)
+		{
+			for (int jNew = Math.max(0, newSizeRank-sizeRank)*16, jOld = Math.max(0, sizeRank-newSizeRank)*16; jNew < minSideLength|| jOld < minSideLength; ++jNew, ++jOld)
+			{
+				newBuildings[iNew][jNew] = buildings[iOld][jOld];
+			}			
+		}
+		buildings = newBuildings;
+		sizeRank = newSizeRank;
+		
 	}
 	public int getSizeRank() {return this.sizeRank;}
 	
-	public void addBuilding(Building newBuilding) {
-		this.buildings.add(newBuilding);
+	public boolean addBuilding(Building newBuilding, Point2D location) {
+		if (!isInVillage(location))
+			return false;
+		
+		Building oldBuilding = this.buildings[(int)location.getX()][(int)location.getY()];
+		if (oldBuilding != null && !(oldBuilding instanceof CityHall))
+		{
+			this.buildings[(int)location.getX()][(int)location.getY()] = newBuilding;
+		}
+		
+		return true;
 	}
-	public void removeBuilding(int index) {
-		this.buildings.remove(index);
+	
+	public boolean removeBuilding(Point2D location) {
+		if ((this.buildings[(int)location.getX()][(int)location.getY()] instanceof CityHall) || !isInVillage(location))
+			return false;
+		this.buildings[(int)location.getX()][(int)location.getY()] = null;
+		return true;
 	}
-	public void removeBuilding(Building deleteBuilding) {
-		this.buildings.remove(deleteBuilding);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//	HELPER METHODS
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public boolean isInVillage(Point2D p)
+	{
+		if (p.getX() > getSideLength(this.getSizeRank()) || p.getX() < 0 || p.getY() > getSideLength(this.getSizeRank()) || p.getY() < 0)
+			return false;
+		return true;
 	}
-
+	
+	public int getSideLength(int sizeRank)
+	{
+		return (sizeRank*2 - 1)*16;
+	}
 }

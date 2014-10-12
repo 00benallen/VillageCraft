@@ -40,6 +40,10 @@ public class Chunk {
 		return harvested;
 	}
 	
+	/**
+	 * 
+	 * @deprecated use instance of Village
+	 */
 	public boolean hasVillage() {
 		return this instanceof Village;
 	}
