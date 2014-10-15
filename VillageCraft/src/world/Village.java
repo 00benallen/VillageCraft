@@ -12,12 +12,10 @@ public class Village extends Chunk{
 		super(biome, initResources);
 		this.population = new ArrayList<Villager>();
 		this.addPopulation(population);
-		this.setSizeRank(population.size());
-		
-		constructBuildings();
+		constructCityHall();
 	}
 	
-	private void constructBuildings()
+	private void constructCityHall()
 	{
 		CityHall cityHall = new CityHall();
 
@@ -33,13 +31,19 @@ public class Village extends Chunk{
 	
 	public void addPopulation(ArrayList<Villager> newPopulation) {
 		this.population.addAll(newPopulation);
+		setSizeRank(this.population.size());
+	}
+	
+	public void addVillager(Villager villager) {
+		this.population.add(villager);
+		setSizeRank(this.population.size());
 	}
 	public int getPopulation() {return population.size();}
 	
 	//TODO this errors Daniel please fix!
 	public void setSizeRank(int population) {
 		int newSizeRank = population/10 + 1;
-		/*int minSideLength = getSideLength(Math.max(newSizeRank, sizeRank));
+		int minSideLength = getSideLength(Math.min(newSizeRank, sizeRank));
 		Building[][] newBuildings = new Building[getSideLength(newSizeRank)][getSideLength(newSizeRank)];
 		for (int iNew = Math.max(0, newSizeRank-sizeRank)*16, iOld = Math.max(0, sizeRank-newSizeRank)*16; iNew < minSideLength|| iOld < minSideLength; ++iNew, ++iOld)
 		{
@@ -48,7 +52,7 @@ public class Village extends Chunk{
 				newBuildings[iNew][jNew] = buildings[iOld][jOld];
 			}			
 		}
-		buildings = newBuildings;*/
+		buildings = newBuildings;
 		sizeRank = newSizeRank;
 		
 	}
@@ -59,7 +63,7 @@ public class Village extends Chunk{
 			return false;
 		
 		Building oldBuilding = this.buildings[(int)location.getX()][(int)location.getY()];
-		if (oldBuilding != null && !(oldBuilding instanceof CityHall))
+		if (oldBuilding == null && !(oldBuilding instanceof CityHall))
 		{
 			this.buildings[(int)location.getX()][(int)location.getY()] = newBuilding;
 		}
@@ -87,6 +91,6 @@ public class Village extends Chunk{
 	
 	public int getSideLength(int sizeRank)
 	{
-		return ((sizeRank*2) - 1)*16;
+		return Math.max(0, ((sizeRank*2) - 1)*16);
 	}
 }

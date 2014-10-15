@@ -34,7 +34,20 @@ public class WorldBuilder {
 		int center = chunks.size()/2;
 		ArrayList<Villager> populationCenter = new ArrayList<Villager>();
 		populationCenter.add(new Villager());
-		chunks.set(center, new Village(chunks.get(center).getBiome(), populationCenter, 0));
+		Village village = new Village(chunks.get(center).getBiome(), populationCenter, 0);
+		chunks.set(center, village);
+		populationCenter.add(new Villager());
+		populationCenter.add(new Villager());
+		populationCenter.add(new Villager());
+		populationCenter.add(new Villager());
+		populationCenter.add(new Villager());
+		populationCenter.add(new Villager());
+		populationCenter.add(new Villager());
+		populationCenter.add(new Villager());
+		populationCenter.add(new Villager());
+		village.addPopulation(populationCenter);
+		
+		
 		
 		World world = new World(chunks);
 		s.close();
