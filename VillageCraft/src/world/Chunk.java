@@ -3,22 +3,21 @@ package world;
 import java.util.ArrayList;
 
 import resources.Material;
+import resources.Proffession;
 
 public class Chunk {
-	private int biome;
+	private int biome, resources;
 	public static final int BIOME_BARREN = 0, BIOME_FOREST = 1;
+	public static final int RSRCE_NOTHING = 0, RSRCE_WOOD  = 1;
+	private static final int[] biomeRsrceType = {RSRCE_NOTHING, RSRCE_WOOD};
 	
-	private int rsrceQuantity = 0;
-	//TODO fill this in
-	private static final int[] biomeRsrceType = {Material.RSRCE_NOTHING, Material.RSRCE_LUMBER};
-	
-	//TODO decide what to make this
-	public static final int initResources = 0;
-	
-	public Chunk(int biome) {
+	public Chunk(int biome, int initResources) {
 		this.setBiome(biome);
+		this.setResources(initResources);
 	}
 	
+	public void setResources(int resources) {this.resources = resources;}
+
 	public int getBiome() {
 		return biome;
 	}
@@ -30,16 +29,13 @@ public class Chunk {
 		return biomeRsrceType[this.getBiome()];
 	}
 	public int getNumRsrces() {
-		return resources.size();
+		return resources;
 	}
-	public ArrayList<Material> harvest(int quantity)
+	public void harvest(int quantity, Villager villager)
 	{
-		ArrayList<Material> harvested = new ArrayList<Material>();
-		for (int i = 0; i < quantity; ++i)
-		{
-			harvested.add(resources.remove(0));
-		}
-		return harvested;
+		resources -= quantity;
+		villager.getProffession().setRsrceQuantity(villager.getProffession().getRsrceQuantity() + quantity);
+		
 	}
 	
 	/**

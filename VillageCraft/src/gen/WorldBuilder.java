@@ -45,13 +45,13 @@ public class WorldBuilder {
 		}
 		
 		for(int i = 0; i < size*size; i++) {
-			chunks.add(new Chunk(rand.nextInt(4)));
+			chunks.add(new Chunk(rand.nextInt(4), 0));
 		}
 		
 		int center = chunks.size()/2;
 		ArrayList<Villager> populationCenter = new ArrayList<Villager>();
 		populationCenter.add(new Villager());
-		chunks.set(center, new Village(chunks.get(center).getBiome(), populationCenter));
+		chunks.set(center, new Village(chunks.get(center).getBiome(), populationCenter, 0));
 		
 		World world = new World(chunks);
 		return world;

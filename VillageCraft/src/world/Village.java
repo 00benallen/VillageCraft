@@ -8,8 +8,8 @@ public class Village extends Chunk{
 	private ArrayList<Villager> population;
 	private Building[][] buildings;
 	
-	public Village(int biome, ArrayList<Villager> population) {
-		super(biome);
+	public Village(int biome, ArrayList<Villager> population, int initResources) {
+		super(biome, initResources);
 		this.addPopulation(population);
 		//TODO Why population.size?
 		this.setSizeRank(population.size());

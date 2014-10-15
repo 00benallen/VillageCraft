@@ -1,21 +1,18 @@
 package world;
-
-import resources.Material;
+import resources.Proffession;
 import resources.Tool;
 
 public class Villager {
 	private boolean adult, alive;
-	private int proffession, health, hunger, thirst, armor;
+	private int health, hunger, thirst, armor;
 	private Tool tool;
-	
 	public static final int initHealth = 20, initHunger = 20, initThirst = 20;
-	public static final int PROF_UNEMPLOYED = 0, PROF_MAYOR = 1;
-	private static final int [] heldRsrce = {Material.RSRCE_NOTHING, Material.RSRCE_ANYHING};
+	private Proffession proffession;
 	
 	public Villager() {
 		this.setAdult(true);
 		this.setAlive(true);
-		this.setProffession(0);
+		this.setProffession(null);
 		this.setHealth(initHealth);
 		this.setHunger(initHunger);
 		this.setThirst(initThirst);
@@ -23,11 +20,6 @@ public class Villager {
 		this.setArmor(0);
 	}
 	
-	public void collect(Chunk c)
-	{
-		//if (c.getRsrceType() == )
-	}
-
 	public boolean isAdult() {return adult;}
 
 	public void setAdult(boolean adult) {this.adult = adult;}
@@ -36,9 +28,9 @@ public class Villager {
 
 	public void setAlive(boolean alive) {this.alive = alive;}
 
-	public int getProffession() {return proffession;}
+	public Proffession getProffession() {return proffession;}
 
-	public void setProffession(int proffession) {this.proffession = proffession;}
+	public void setProffession(Proffession proffession) {this.proffession = proffession;}
 
 	public int getHealth() {return health;}
 
@@ -60,5 +52,7 @@ public class Villager {
 
 	public void setArmor(int armor) {this.armor = armor;}
 	
-	public int getHeldRsrceType() {return this.heldRsrce[getProffession()];}
+	public int getHeldRsrceType() {return this.proffession.getHeldRsrceType();}
+	
+	public int getHeldRsrce() {return this.proffession.getRsrceQuantity();}
 }

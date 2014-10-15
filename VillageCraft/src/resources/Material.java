@@ -1,5 +1,10 @@
 package resources;
 
+/**
+ * 
+ * @deprecated 
+ *
+ */
 public class Material extends Item {
 
 	public static final int RSRCE_ANYHING = -1, RSRCE_NOTHING = 0, RSRCE_LUMBER = 1;
