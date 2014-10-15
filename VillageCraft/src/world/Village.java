@@ -8,6 +8,8 @@ public class Village extends Chunk{
 	private ArrayList<Villager> population;
 	private Building[][] buildings;
 	
+	private int updateCount = 0; //prevents multiple updates resulting from multiple chunk occupancies
+	
 	public Village(int biome, ArrayList<Villager> population, int initResources) {
 		super(biome, initResources);
 		this.population = new ArrayList<Villager>();
@@ -27,6 +29,32 @@ public class Village extends Chunk{
 		buildings[y][x+1] = cityHall;
 		buildings[y+1][x] = cityHall;
 		buildings[y+1][x+1] = cityHall;
+	}
+	
+	@Override
+	public void update()
+	{
+		if (updateCount == 0)  //prevents multiple updates resulting from multiple chunk occupancies
+		{
+			for (int i = 0; i < population.size(); ++i)
+			{
+				population.get(i).update();
+			}
+			
+			for (int i = 0; i < buildings.length; ++i)
+			{
+				for (int j = 0; j < buildings[i].length; ++j)
+				{
+					buildings[i][j].update();
+				}
+			}
+		}
+		
+		++updateCount;
+		if (updateCount == getNumChunks() || getNumChunks() == 0)
+		{
+			updateCount = 0;
+		}
 	}
 	
 	public void addPopulation(ArrayList<Villager> newPopulation) {
@@ -92,5 +120,10 @@ public class Village extends Chunk{
 	public int getSideLength(int sizeRank)
 	{
 		return Math.max(0, ((sizeRank*2) - 1)*16);
+	}
+	
+	private int getNumChunks()
+	{
+		return Math.max(0, ((sizeRank*2) - 1)*((sizeRank*2) - 1));
 	}
 }

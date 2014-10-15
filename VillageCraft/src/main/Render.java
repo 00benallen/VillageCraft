@@ -41,9 +41,15 @@ public class Render implements Runnable {
 				}
 			}
 			
-			drawGround();
+			draw();
 			pause();
 		}
+	}
+	
+	public void draw()
+	{
+		
+		drawGround();
 	}
 	
 	public void drawGround() {

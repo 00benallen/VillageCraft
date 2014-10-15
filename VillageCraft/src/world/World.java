@@ -10,10 +10,16 @@ public class World {
 		this.chunks = chunks;
 	}
 	
+	public void update() {
+		for (int i = 0; i < chunks.size(); ++i)
+		{
+			getChunk(i).update();
+		}
+	}
+	
 	public Chunk getChunk(int index) {
 		return chunks.get(index);
 	}
-
 
 	public void addChunk(Chunk chunk) {
 		this.chunks.add(chunk);

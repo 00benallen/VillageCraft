@@ -11,7 +11,7 @@ public class Update {
 	}
 	
 	public void update() {
-		
+		world1.update();
 	}
 
 	public World getWorld1() {

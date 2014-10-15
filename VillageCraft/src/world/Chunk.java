@@ -16,6 +16,11 @@ public class Chunk {
 		this.setResources(initResources);
 	}
 	
+	public void update()
+	{
+		
+	}
+	
 	public void setResources(int resources) {this.resources = resources;}
 
 	public int getBiome() {

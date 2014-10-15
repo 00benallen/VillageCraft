@@ -20,6 +20,11 @@ public class Villager {
 		this.setArmor(0);
 	}
 	
+	public void update()
+	{
+		
+	}
+	
 	public boolean isAdult() {return adult;}
 
 	public void setAdult(boolean adult) {this.adult = adult;}
