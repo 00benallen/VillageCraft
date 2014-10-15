@@ -1,6 +1,7 @@
 package world;
 
 public abstract class Building {
+	
 	public enum BuildingType {
 		CITYHALL, HOUSE
 	}

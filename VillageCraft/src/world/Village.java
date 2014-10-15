@@ -3,11 +3,9 @@ package world;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import resources.Villager;
-
 public class Village extends Chunk{
 	private int sizeRank;
-	private ArrayList<Villager> villagers;
+	private ArrayList<Villager> population;
 	private Building[][] buildings;
 	
 	public Village(int biome, ArrayList<Villager> population) {
@@ -34,9 +32,9 @@ public class Village extends Chunk{
 	}
 	
 	public void addPopulation(ArrayList<Villager> newPopulation) {
-		this.villagers.addAll(newPopulation);
+		this.population.addAll(newPopulation);
 	}
-	public int getPopulation() {return villagers.size();}
+	public int getPopulation() {return population.size();}
 	
 	public void setSizeRank(int population) {
 		int newSizeRank = population/10;

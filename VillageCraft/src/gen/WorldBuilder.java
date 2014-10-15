@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-import resources.Villager;
 import world.Chunk;
 import world.Village;
+import world.Villager;
 import world.World;
 
 public class WorldBuilder {

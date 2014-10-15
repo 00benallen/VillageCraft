@@ -1,4 +1,7 @@
-package resources;
+package world;
+
+import resources.Material;
+import resources.Tool;
 
 public class Villager {
 	private boolean adult, alive;
@@ -7,6 +10,7 @@ public class Villager {
 	
 	public static final int initHealth = 20, initHunger = 20, initThirst = 20;
 	public static final int PROF_UNEMPLOYED = 0, PROF_MAYOR = 1;
+	private static final int [] heldRsrce = {Material.RSRCE_NOTHING, Material.RSRCE_ANYHING};
 	
 	public Villager() {
 		this.setAdult(true);
@@ -17,6 +21,11 @@ public class Villager {
 		this.setThirst(initThirst);
 		this.setTool(null);
 		this.setArmor(0);
+	}
+	
+	public void collect(Chunk c)
+	{
+		//if (c.getRsrceType() == )
 	}
 
 	public boolean isAdult() {return adult;}
@@ -49,5 +58,7 @@ public class Villager {
 
 	public int getArmor() {return armor;}
 
-	public void setArmor(int armor) {this.armor = armor;}	
+	public void setArmor(int armor) {this.armor = armor;}
+	
+	public int getHeldRsrceType() {return this.heldRsrce[getProffession()];}
 }
