@@ -7,6 +7,11 @@ public class House extends Building {
 		this.setPeople(people);
 	}
 	
+	@Override
+	public void update() {
+		
+	}
+	
 	//TODO should this really be public?
 	public void setPeople(int people) {this.people = people;}
 	public int getPeople() {return this.people;}
@@ -15,5 +20,4 @@ public class House extends Building {
 	public int getType() {
 		return BuildingType.HOUSE.ordinal();
 	}
-
 }
