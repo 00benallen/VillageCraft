@@ -52,8 +52,6 @@ public class Render implements Runnable {
 	}
 	
 	public void drawWorld() {
-		World world1 = Main.getWorld1();
 		
-		//TODO
 	}
 }

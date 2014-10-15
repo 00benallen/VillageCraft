@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import main.Main;
 import world.Chunk;
 import world.Village;
 import world.Villager;
@@ -23,28 +24,10 @@ public class WorldBuilder {
 		
 		ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 		
-		int size = 0;
+		String line = s.nextLine();
+		int size = Integer.parseInt(line.substring(2));
 		Random rand = new Random();
-		while(s.hasNextLine()) {
-			String line = s.nextLine();
-			if(line.charAt(0) == 'S') {
-				size = Integer.parseInt(line.substring(2));
-			}
-			else if(line.charAt(0) == 'V') {
-				String[] splitLine = line.split(" ");
-				int x = Integer.parseInt(splitLine[1]);
-				int y = Integer.parseInt(splitLine[2]);
-				//chunks.set((x + y)*size, new Chunk(rand.nextInt(4), true, false ));
-			}
-			else if(line.charAt(0) == 'P') {
-				String[] splitLine = line.split(" ");
-				int x = Integer.parseInt(splitLine[1]);
-				int y = Integer.parseInt(splitLine[2]);
-				//chunks.set((x + y)*size, new Chunk(rand.nextInt(4), true, true));
-			}
-		}
-		
-		for(int i = 0; i < size*size; i++) {
+		for(int j = 0; j < size*size; j++) {
 			chunks.add(new Chunk(rand.nextInt(4), 0));
 		}
 		
@@ -54,6 +37,7 @@ public class WorldBuilder {
 		chunks.set(center, new Village(chunks.get(center).getBiome(), populationCenter, 0));
 		
 		World world = new World(chunks);
+		s.close();
 		return world;
 	}
 

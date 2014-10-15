@@ -10,8 +10,8 @@ public class Village extends Chunk{
 	
 	public Village(int biome, ArrayList<Villager> population, int initResources) {
 		super(biome, initResources);
+		this.population = new ArrayList<Villager>();
 		this.addPopulation(population);
-		//TODO Why population.size?
 		this.setSizeRank(population.size());
 		
 		constructBuildings();
@@ -36,9 +36,10 @@ public class Village extends Chunk{
 	}
 	public int getPopulation() {return population.size();}
 	
+	//TODO this errors Daniel please fix!
 	public void setSizeRank(int population) {
-		int newSizeRank = population/10;
-		int minSideLength = getSideLength(Math.min(newSizeRank, sizeRank));
+		int newSizeRank = population/10 + 1;
+		/*int minSideLength = getSideLength(Math.max(newSizeRank, sizeRank));
 		Building[][] newBuildings = new Building[getSideLength(newSizeRank)][getSideLength(newSizeRank)];
 		for (int iNew = Math.max(0, newSizeRank-sizeRank)*16, iOld = Math.max(0, sizeRank-newSizeRank)*16; iNew < minSideLength|| iOld < minSideLength; ++iNew, ++iOld)
 		{
@@ -47,7 +48,7 @@ public class Village extends Chunk{
 				newBuildings[iNew][jNew] = buildings[iOld][jOld];
 			}			
 		}
-		buildings = newBuildings;
+		buildings = newBuildings;*/
 		sizeRank = newSizeRank;
 		
 	}
@@ -86,6 +87,6 @@ public class Village extends Chunk{
 	
 	public int getSideLength(int sizeRank)
 	{
-		return (sizeRank*2 - 1)*16;
+		return ((sizeRank*2) - 1)*16;
 	}
 }
