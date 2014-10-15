@@ -1,14 +1,13 @@
 package world;
 
 import java.util.ArrayList;
-
-import resources.Material;
 import resources.Proffession;
 
 public class Chunk {
 	private int biome, resources;
 	public static final int BIOME_BARREN = 0, BIOME_FOREST = 1;
 	public static final int RSRCE_NOTHING = 0, RSRCE_WOOD  = 1;
+	public static final int NUM_RSRCE_TYPES = 1;
 	private static final int[] biomeRsrceType = {RSRCE_NOTHING, RSRCE_WOOD};
 	
 	public Chunk(int biome, int initResources) {

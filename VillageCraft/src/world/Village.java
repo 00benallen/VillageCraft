@@ -7,7 +7,7 @@ public class Village extends Chunk{
 	private int sizeRank;
 	private ArrayList<Villager> population;
 	private Building[][] buildings;
-	
+	//private int[] resources = new int[Chunk.NUM_RSRCE_TYPES];
 	private int updateCount = 0; //prevents multiple updates resulting from multiple chunk occupancies
 	
 	public Village(int biome, ArrayList<Villager> population, int initResources) {
