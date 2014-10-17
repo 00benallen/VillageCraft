@@ -1,5 +1,7 @@
 package world;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -55,6 +57,12 @@ public class Village extends Chunk{
 		{
 			updateCount = 0;
 		}
+	}
+	
+	@Override
+	public Image draw()
+	{
+		return null;
 	}
 	
 	public void addPopulation(ArrayList<Villager> newPopulation) {

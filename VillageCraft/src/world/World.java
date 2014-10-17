@@ -1,5 +1,6 @@
 package world;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class World {
@@ -14,6 +15,14 @@ public class World {
 		for (int i = 0; i < chunks.size(); ++i)
 		{
 			getChunk(i).update();
+		}
+	}
+	
+	public void draw(Graphics g)
+	{
+		for (Chunk c : chunks)
+		{
+			//c.draw(g);
 		}
 	}
 	

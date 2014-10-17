@@ -1,6 +1,9 @@
 package world;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
+
 import resources.Proffession;
 
 public class Chunk {
@@ -18,6 +21,11 @@ public class Chunk {
 	public void update()
 	{
 		
+	}
+	
+	public Image draw()
+	{
+		return null;
 	}
 	
 	public void setResources(int resources) {this.resources = resources;}
