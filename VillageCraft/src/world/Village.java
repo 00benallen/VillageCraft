@@ -1,8 +1,8 @@
 package world;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Village extends Chunk{
@@ -11,6 +11,9 @@ public class Village extends Chunk{
 	private Building[][] buildings;
 	//private int[] resources = new int[Chunk.NUM_RSRCE_TYPES];
 	private int updateCount = 0; //prevents multiple updates resulting from multiple chunk occupancies
+	
+	public static final int length = 16;
+	public static final int buildingLength = 8;
 	
 	public Village(int biome, ArrayList<Villager> population, int initResources) {
 		super(biome, initResources);
@@ -65,17 +68,19 @@ public class Village extends Chunk{
 	@Override
 	public Image draw()
 	{
+		BufferedImage image = new BufferedImage(length*buildingLength, length*buildingLength, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = image.getGraphics();
 		for (int i = 0; i < buildings.length; ++i)
 		{
 			for (int j = 0; j < buildings[i].length; ++j)
 			{
 				if (buildings[i][j] != null)
 				{
-					buildings[i][j].draw();
+					g.drawImage(buildings[i][j].draw(), i*buildingLength, j*buildingLength, null);
 				}
 			}
 		}
-		return null;
+		return image;
 	}
 	
 	public void addPopulation(ArrayList<Villager> newPopulation) {
@@ -146,7 +151,7 @@ public class Village extends Chunk{
 	
 	public int getSideLength(int sizeRank)
 	{
-		return Math.max(0, ((sizeRank*2) - 1)*16);
+		return Math.max(0, ((sizeRank*2) - 1)*length);
 	}
 	
 	private int getNumChunks()

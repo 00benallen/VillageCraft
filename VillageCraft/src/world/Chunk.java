@@ -30,28 +30,20 @@ public class Chunk {
 	
 	public void setResources(int resources) {this.resources = resources;}
 
-	public int getBiome() {
-		return biome;
-	}
-	public void setBiome(int biome) {
-		this.biome = biome;
-	}
+	public int getBiome() {return biome;}
+	public void setBiome(int biome) {this.biome = biome;}
 	
-	public int getRsrceType() {
-		return biomeRsrceType[this.getBiome()];
-	}
-	public int getNumRsrces() {
-		return resources;
-	}
+	public int getRsrceType() {return biomeRsrceType[this.getBiome()];}
+	
+	public int getNumRsrces() {return resources;}
+	
 	public void harvest(int quantity, Villager villager)
 	{
 		resources -= quantity;
 		villager.getProffession().setRsrceQuantity(villager.getProffession().getRsrceQuantity() + quantity);
-		
 	}
 	
 	/**
-	 * 
 	 * @deprecated use instance of Village
 	 */
 	public boolean hasVillage() {
