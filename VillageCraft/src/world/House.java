@@ -1,5 +1,7 @@
 package world;
 
+import java.awt.Image;
+
 public class House extends Building {
 	private int people;
 
@@ -11,7 +13,12 @@ public class House extends Building {
 	public void update() {
 		
 	}
-	
+
+	@Override
+	public Image draw() {
+		return null;
+	}
+
 	//TODO should this really be public?
 	public void setPeople(int people) {this.people = people;}
 	public int getPeople() {return this.people;}

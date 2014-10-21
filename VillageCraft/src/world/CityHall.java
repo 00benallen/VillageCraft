@@ -1,5 +1,7 @@
 package world;
 
+import java.awt.Image;
+
 public class CityHall extends Building {
 	private int unrest = 0;
 	
@@ -7,6 +9,11 @@ public class CityHall extends Building {
 	public void update()
 	{
 		
+	}
+	
+	@Override
+	public Image draw() {
+		return null;
 	}
 	
 	@Override

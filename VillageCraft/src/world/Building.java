@@ -1,5 +1,7 @@
 package world;
 
+import java.awt.Image;
+
 public abstract class Building {
 	
 	public enum BuildingType {
@@ -8,4 +10,6 @@ public abstract class Building {
 	public abstract int getType();
 	
 	public abstract void update();
+	
+	public abstract Image draw();
 }

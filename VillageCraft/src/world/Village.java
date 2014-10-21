@@ -69,7 +69,10 @@ public class Village extends Chunk{
 		{
 			for (int j = 0; j < buildings[i].length; ++j)
 			{
-				
+				if (buildings[i][j] != null)
+				{
+					buildings[i][j].draw();
+				}
 			}
 		}
 		return null;
