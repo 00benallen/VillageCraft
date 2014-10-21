@@ -23,7 +23,7 @@ public class Village extends Chunk{
 	{
 		CityHall cityHall = new CityHall();
 
-		int sideLength = getSideLength(this.getSizeRank());
+		int sideLength = getSideLength();
 		buildings = new Building[sideLength][sideLength];
 		
 		int x = sideLength/2 - 1, y = sideLength/2 - 1;
@@ -67,18 +67,21 @@ public class Village extends Chunk{
 	{
 		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
-		int y0 = (drawCount/getChunkSideLength())*getSideLength(sizeRank);
-		int x0 = (drawCount%getChunkSideLength())*getSideLength(sizeRank);
-		for (int i = x0; i < x0+getSideLength(sizeRank); ++i)
+		int chunkX = drawCount%getChunkSideLength(), chunkY = drawCount%getChunkSideLength();
+		int x0 = (chunkX)*Chunk.lengthOfChunk, y0 = (chunkY)*Chunk.lengthOfChunk;
+		for (int i = x0; i < x0+Chunk.lengthOfChunk; ++i)
 		{
-			for (int j = y0; j < y0+getSideLength(sizeRank); ++j)
+			for (int j = y0; j < y0+Chunk.lengthOfChunk; ++j)
 			{
 				if (buildings[i][j] != null)
 				{
-					g.drawImage(buildings[i][j].draw(), (i-x0)*buildingLength, (j-y0)*buildingLength, null);
+					g.drawImage(buildings[i][j].draw(), (i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, null);
 				}
 			}
 		}
+		
+		g.setColor(Color.red);
+		g.fillRect(1, 1, 5, 5);
 		
 		++drawCount;
 		if (drawCount == getNumChunks() || getNumChunks() == 0)
@@ -150,22 +153,31 @@ public class Village extends Chunk{
 	
 	public boolean isInVillage(Point2D p)
 	{
-		if (p.getX() > getSideLength(this.getSizeRank()) || p.getX() < 0 || p.getY() > getSideLength(this.getSizeRank()) || p.getY() < 0)
+		if (p.getX() > getSideLength() || p.getX() < 0 || p.getY() > getSideLength() || p.getY() < 0)
 			return false;
 		return true;
 	}
 	
-	public int getSideLength(int sizeRank)
+	public int getPixelSideLength() {return getPixelSideLength(this.getSizeRank());}
+	public int getPixelSideLength(int sizeRank)
 	{
-		return Math.max(0, ((sizeRank*2) - 1)*length);
+		return getSideLength(sizeRank)*Chunk.lengthOfBuilding;
 	}
 	
-	public int getChunkSideLength()
+	public int getSideLength() {return getSideLength(this.getSizeRank());}
+	public int getSideLength(int sizeRank)
+	{
+		return getChunkSideLength(sizeRank)*Chunk.lengthOfChunk;
+	}
+	
+	public int getChunkSideLength() {return getChunkSideLength(this.getSizeRank());}
+	public int getChunkSideLength(int sizeRank)
 	{
 		return Math.max(0, ((sizeRank*2) - 1));
 	}
 	
-	private int getNumChunks()
+	private int getNumChunks() {return getNumChunks(this.getSizeRank());}
+	private int getNumChunks(int sizeRank)
 	{
 		return Math.max(0, ((sizeRank*2) - 1)*((sizeRank*2) - 1));
 	}
