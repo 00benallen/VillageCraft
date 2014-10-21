@@ -1,8 +1,10 @@
 package world;
+import java.awt.Image;
+
 import resources.Proffession;
 import resources.Tool;
 
-public class Villager {
+public class Villager implements ScreenComponent{
 	private boolean adult, alive;
 	private int health, hunger, thirst, armor;
 	private Tool tool;
@@ -25,6 +27,12 @@ public class Villager {
 	public void update()
 	{
 		
+	}
+	
+	@Override
+	public Image draw()
+	{
+		return null;
 	}
 	
 	public int getX() {return x;}
