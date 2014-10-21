@@ -10,7 +10,7 @@ public class Village extends Chunk{
 	private ArrayList<Villager> population;
 	private Building[][] buildings;
 	//private int[] resources = new int[Chunk.NUM_RSRCE_TYPES];
-	private int updateCount = 0; //prevents multiple updates resulting from multiple chunk occupancies
+	private int updateCount = 0, drawCount = 0; //prevents multiple updates resulting from multiple chunk occupancies
 		
 	public Village(int biome, ArrayList<Villager> population, int initResources) {
 		super(biome, initResources);
@@ -65,18 +65,27 @@ public class Village extends Chunk{
 	@Override
 	public BufferedImage draw()
 	{
-		BufferedImage image = new BufferedImage(getPixelLength(), getPixelLength(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
-		for (int i = 0; i < buildings.length; ++i)
+		int y0 = (drawCount/getChunkSideLength())*getSideLength(sizeRank);
+		int x0 = (drawCount%getChunkSideLength())*getSideLength(sizeRank);
+		for (int i = x0; i < x0+getSideLength(sizeRank); ++i)
 		{
-			for (int j = 0; j < buildings[i].length; ++j)
+			for (int j = y0; j < y0+getSideLength(sizeRank); ++j)
 			{
 				if (buildings[i][j] != null)
 				{
-					g.drawImage(buildings[i][j].draw(), i*buildingLength, j*buildingLength, null);
+					g.drawImage(buildings[i][j].draw(), (i-x0)*buildingLength, (j-y0)*buildingLength, null);
 				}
 			}
 		}
+		
+		++drawCount;
+		if (drawCount == getNumChunks() || getNumChunks() == 0)
+		{
+			drawCount = 0;
+		}
+		
 		return image;
 	}
 	
@@ -149,6 +158,11 @@ public class Village extends Chunk{
 	public int getSideLength(int sizeRank)
 	{
 		return Math.max(0, ((sizeRank*2) - 1)*length);
+	}
+	
+	public int getChunkSideLength()
+	{
+		return Math.max(0, ((sizeRank*2) - 1));
 	}
 	
 	private int getNumChunks()

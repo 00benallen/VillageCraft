@@ -30,6 +30,10 @@ public class World implements ScreenComponent{
 			BufferedImage cI = c.draw();
 			g.drawImage(cI, (i%getSize())*Chunk.getPixelLength(), (i/getSize())*Chunk.getPixelLength(), null);
 		}
+		for (int i = 0; i < chunks.size(); ++i)
+		{
+
+		}
 		return image;
 	}
 	
