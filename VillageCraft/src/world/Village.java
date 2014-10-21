@@ -47,7 +47,10 @@ public class Village extends Chunk{
 			{
 				for (int j = 0; j < buildings[i].length; ++j)
 				{
-					buildings[i][j].update();
+					if (buildings[i][j] != null)
+					{
+						buildings[i][j].update();
+					}
 				}
 			}
 		}
@@ -62,6 +65,13 @@ public class Village extends Chunk{
 	@Override
 	public Image draw()
 	{
+		for (int i = 0; i < buildings.length; ++i)
+		{
+			for (int j = 0; j < buildings[i].length; ++j)
+			{
+				
+			}
+		}
 		return null;
 	}
 	
@@ -74,7 +84,13 @@ public class Village extends Chunk{
 		this.population.add(villager);
 		setSizeRank(this.population.size());
 	}
-	public int getPopulation() {return population.size();}
+	
+	public int getPopulationSize() {return population.size();}
+	
+	public ArrayList<Villager> getPopulation()
+	{
+		return population;
+	}
 	
 	//TODO this errors Daniel please fix!
 	public void setSizeRank(int population) {
