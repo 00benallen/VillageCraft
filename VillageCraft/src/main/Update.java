@@ -4,17 +4,17 @@ import world.World;
 import gen.WorldBuilder;
 
 public class Update {
-	private World world1;
+	private World loadedWorld;
 	
 	public void init() {
-		world1 = WorldBuilder.generateWorld("World1.txt");
+		loadedWorld = WorldBuilder.generateWorld("World1.txt");
 	}
 	
 	public void update() {
-		world1.update();
+		loadedWorld.update();
 	}
 
-	public World getWorld1() {
-		return world1;
+	public World getLoadedWorld() {
+		return loadedWorld;
 	}
 }

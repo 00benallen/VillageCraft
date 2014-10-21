@@ -8,7 +8,7 @@ public class Main implements Runnable {
 	private Update update;
 	private Render render;
 	private Thread mainThread;
-	private static World world1;
+	private static World loadedWorld;
 	
 	
 	public static void main(String[] args) {
@@ -21,7 +21,7 @@ public class Main implements Runnable {
 	public void init() {
 		update = new Update();
 		update.init();
-		world1 = update.getWorld1();
+		loadedWorld = update.getLoadedWorld();
 		render = new Render(GraphicsMain.getGraphics());
 		render.start();
 		render.pause();
@@ -63,7 +63,7 @@ public class Main implements Runnable {
 		}
 	}
 	
-	public static World getWorld1() {
-		return world1;
+	public static World getLoadedWorld() {
+		return loadedWorld;
 	}
 }
