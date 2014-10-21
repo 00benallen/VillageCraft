@@ -34,7 +34,7 @@ public class Villager implements ScreenComponent{
 	@Override
 	public BufferedImage draw()
 	{
-		return null;
+		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 	}
 	
 	public int getX() {return x;}
