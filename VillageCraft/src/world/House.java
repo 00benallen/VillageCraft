@@ -16,7 +16,7 @@ public class House extends Building {
 
 	@Override
 	public BufferedImage draw() {
-		return null;
+		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 	}
 
 	//TODO should this really be public?
