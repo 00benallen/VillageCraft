@@ -1,7 +1,7 @@
 package world;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 public interface ScreenComponent {
-	public Image draw();
+	public BufferedImage draw();
 }

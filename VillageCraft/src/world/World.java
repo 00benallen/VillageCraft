@@ -1,9 +1,10 @@
 package world;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class World {
+public class World implements ScreenComponent{
 	
 	private ArrayList<Chunk> chunks;	
 	
@@ -18,12 +19,18 @@ public class World {
 		}
 	}
 	
-	public void draw(Graphics g)
+	@Override
+	public BufferedImage draw()
 	{
-		for (Chunk c : chunks)
+		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = image.getGraphics();
+		for (int i = 0; i < chunks.size(); ++i)
 		{
-			//c.draw(g);
+			Chunk c = chunks.get(i);
+			BufferedImage cI = c.draw();
+			g.drawImage(cI, (i%getSize())*Chunk.getPixelLength(), (i/getSize())*Chunk.getPixelLength(), null);
 		}
+		return image;
 	}
 	
 	public Chunk getChunk(int index) {

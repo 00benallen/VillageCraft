@@ -1,5 +1,7 @@
 package world;
-import java.awt.Image;
+
+
+import java.awt.image.BufferedImage;
 
 import resources.Proffession;
 import resources.Tool;
@@ -30,7 +32,7 @@ public class Villager implements ScreenComponent{
 	}
 	
 	@Override
-	public Image draw()
+	public BufferedImage draw()
 	{
 		return null;
 	}

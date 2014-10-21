@@ -1,6 +1,6 @@
 package world;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 public class House extends Building {
 	private int people;
@@ -15,7 +15,7 @@ public class House extends Building {
 	}
 
 	@Override
-	public Image draw() {
+	public BufferedImage draw() {
 		return null;
 	}
 

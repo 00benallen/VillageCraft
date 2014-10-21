@@ -1,7 +1,5 @@
 package world;
 
-import java.awt.Image;
-
 public abstract class Building implements ScreenComponent{
 	
 	public enum BuildingType {

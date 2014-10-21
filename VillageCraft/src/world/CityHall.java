@@ -1,6 +1,6 @@
 package world;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 public class CityHall extends Building {
 	private int unrest = 0;
@@ -12,7 +12,7 @@ public class CityHall extends Building {
 	}
 	
 	@Override
-	public Image draw() {
+	public BufferedImage draw() {
 		return null;
 	}
 	

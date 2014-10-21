@@ -11,10 +11,7 @@ public class Village extends Chunk{
 	private Building[][] buildings;
 	//private int[] resources = new int[Chunk.NUM_RSRCE_TYPES];
 	private int updateCount = 0; //prevents multiple updates resulting from multiple chunk occupancies
-	
-	public static final int length = 16;
-	public static final int buildingLength = 8;
-	
+		
 	public Village(int biome, ArrayList<Villager> population, int initResources) {
 		super(biome, initResources);
 		this.population = new ArrayList<Villager>();
@@ -66,9 +63,9 @@ public class Village extends Chunk{
 	}
 	
 	@Override
-	public Image draw()
+	public BufferedImage draw()
 	{
-		BufferedImage image = new BufferedImage(length*buildingLength, length*buildingLength, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(getPixelLength(), getPixelLength(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
 		for (int i = 0; i < buildings.length; ++i)
 		{

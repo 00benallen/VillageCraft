@@ -58,6 +58,6 @@ public class Render implements Runnable {
 	}
 	
 	public void drawWorld() {
-		Main.getLoadedWorld().draw(g);
+		Main.getLoadedWorld().draw();
 	}
 }

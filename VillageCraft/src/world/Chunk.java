@@ -1,18 +1,17 @@
 package world;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
 
-import resources.Proffession;
-
-public class Chunk {
+public class Chunk implements ScreenComponent{
 	private int biome, resources;
 	public static final int BIOME_BARREN = 0, BIOME_FOREST = 1;
 	public static final int RSRCE_NOTHING = 0, RSRCE_WOOD  = 1;
 	public static final int NUM_RSRCE_TYPES = 1;
 	private static final int[] biomeRsrceType = {RSRCE_NOTHING, RSRCE_WOOD};
-	
+
+	public static final int length = 16;
+	public static final int buildingLength = 8;
+
 	public Chunk(int biome, int initResources) {
 		this.setBiome(biome);
 		this.setResources(initResources);
@@ -23,7 +22,8 @@ public class Chunk {
 		
 	}
 	
-	public Image draw()
+	@Override
+	public BufferedImage draw()
 	{
 		return null;
 	}
@@ -36,6 +36,8 @@ public class Chunk {
 	public int getRsrceType() {return biomeRsrceType[this.getBiome()];}
 	
 	public int getNumRsrces() {return resources;}
+	
+	public static int getPixelLength(){return length*buildingLength;}
 	
 	public void harvest(int quantity, Villager villager)
 	{
