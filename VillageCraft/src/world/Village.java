@@ -63,11 +63,13 @@ public class Village extends Chunk{
 	}
 	
 	@Override
-	public BufferedImage draw()
+	public BufferedImage draw(Graphics2D g) 
 	{
+		g.setColor(Color.red);
+
 		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = image.getGraphics();
-		int chunkX = drawCount%getChunkSideLength(), chunkY = drawCount%getChunkSideLength();
+		Graphics g2 = image.getGraphics();
+		int chunkX = drawCount%getChunkSideLength(), chunkY = drawCount/getChunkSideLength();
 		int x0 = (chunkX)*Chunk.lengthOfChunk, y0 = (chunkY)*Chunk.lengthOfChunk;
 		for (int i = x0; i < x0+Chunk.lengthOfChunk; ++i)
 		{
@@ -75,13 +77,14 @@ public class Village extends Chunk{
 			{
 				if (buildings[i][j] != null)
 				{
-					g.drawImage(buildings[i][j].draw(), (i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, null);
+					g2.drawImage(buildings[i][j].draw(g), (i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, null);
+					g2.fillRect((i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, 6, 6);
+					g.fillRect(55+i*lengthOfBuilding, 65+j*lengthOfBuilding, 6, 6);
 				}
 			}
 		}
 		
-		g.setColor(Color.red);
-		g.fillRect(1, 1, 5, 5);
+		g2.dispose();
 		
 		++drawCount;
 		if (drawCount == getNumChunks() || getNumChunks() == 0)

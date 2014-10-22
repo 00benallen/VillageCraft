@@ -1,5 +1,6 @@
 package world;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class CityHall extends Building {
@@ -12,7 +13,7 @@ public class CityHall extends Building {
 	}
 	
 	@Override
-	public BufferedImage draw() {
+	public BufferedImage draw(Graphics2D g) {
 		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 	}
 	

@@ -1,5 +1,6 @@
 package world;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class Chunk implements ScreenComponent{
@@ -23,9 +24,8 @@ public class Chunk implements ScreenComponent{
 	}
 	
 	@Override
-	public BufferedImage draw()
-	{
-		return null;
+	public BufferedImage draw(Graphics2D g) {
+		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 	}
 	
 	public void setResources(int resources) {this.resources = resources;}

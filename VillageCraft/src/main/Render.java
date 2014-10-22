@@ -49,15 +49,15 @@ public class Render implements Runnable {
 	public void draw()
 	{
 		drawWorld();
-		drawGround();
-	}
-	
-	public void drawGround() {
-		g.setColor(new Color(1, 166, 17));
-		g.fillRect(0, 0, GraphicsMain.WIDTH, GraphicsMain.HEIGHT);
+		//drawGround();
 	}
 	
 	public void drawWorld() {
-		Main.getLoadedWorld().draw();
+		g.drawImage(Main.getLoadedWorld().draw(g), 0, 0, null);
 	}
+
+	public void drawGround() {
+		g.setColor(new Color(1, 166, 17));
+		g.fillRect(0, 0, GraphicsMain.WIDTH, GraphicsMain.HEIGHT);
+	}	
 }

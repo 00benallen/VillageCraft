@@ -1,6 +1,8 @@
 package world;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -20,20 +22,22 @@ public class World implements ScreenComponent{
 	}
 	
 	@Override
-	public BufferedImage draw()
+	public BufferedImage draw(Graphics2D g)
 	{
 		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = image.getGraphics();
+		Graphics gI = image.getGraphics();
 		for (int i = 0; i < chunks.size(); ++i)
 		{
 			Chunk c = chunks.get(i);
-			BufferedImage cI = c.draw();
-			g.drawImage(cI, (i%getSize())*Chunk.getPixelLength(), (i/getSize())*Chunk.getPixelLength(), null);
+			BufferedImage cI = c.draw(g);
+			gI.drawImage(cI, (i%getSize())*Chunk.getPixelLength(), (i/getSize())*Chunk.getPixelLength(), null);
+			gI.setColor(Color.red);
 		}
 		for (int i = 0; i < chunks.size(); ++i)
 		{
 
 		}
+		gI.dispose();
 		return image;
 	}
 	
