@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import main.Render;
+
 public class World implements ScreenComponent{
 	
 	private ArrayList<Chunk> chunks;	
@@ -24,14 +26,13 @@ public class World implements ScreenComponent{
 	@Override
 	public BufferedImage draw(Graphics2D g)
 	{
-		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(Chunk.getPixelLength()*getSize(), Chunk.getPixelLength()*getSize(), BufferedImage.TYPE_INT_ARGB);
 		Graphics gI = image.getGraphics();
 		for (int i = 0; i < chunks.size(); ++i)
 		{
 			Chunk c = chunks.get(i);
 			BufferedImage cI = c.draw(g);
 			gI.drawImage(cI, (i%getSize())*Chunk.getPixelLength(), (i/getSize())*Chunk.getPixelLength(), null);
-			gI.setColor(Color.red);
 		}
 		for (int i = 0; i < chunks.size(); ++i)
 		{

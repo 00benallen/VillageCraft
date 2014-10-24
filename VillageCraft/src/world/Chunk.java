@@ -1,7 +1,11 @@
 package world;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+
+import main.Render;
 
 public class Chunk implements ScreenComponent{
 	private int biome, resources;
@@ -25,7 +29,16 @@ public class Chunk implements ScreenComponent{
 	
 	@Override
 	public BufferedImage draw(Graphics2D g) {
-		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		Graphics gI = image.getGraphics();
+		
+		if (Render.drawChunkBoundaries)
+		{
+			gI.setColor(Color.black);
+			gI.fillRect(0, 0, Chunk.getPixelLength()-1, Chunk.getPixelLength()-1);
+		}
+
+		return image;
 	}
 	
 	public void setResources(int resources) {this.resources = resources;}
