@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class World implements ScreenComponent{
 	
-	private ArrayList<Chunk> chunks;	
+	private volatile ArrayList<Chunk> chunks;	
 	
 	public World(ArrayList<Chunk> chunks) {
 		this.chunks = chunks;
@@ -28,11 +28,19 @@ public class World implements ScreenComponent{
 		{
 			Chunk c = chunks.get(i);
 			BufferedImage cI = c.draw();
-			gI.drawImage(cI, (i%getSize())*Chunk.getPixelLength(), (i/getSize())*Chunk.getPixelLength(), null);
+			gI.drawImage(cI, (i%getSize())*Chunk.getPixelLength(), (i/getSize())*Chunk.getPixelLength(), Chunk.getPixelLength(), Chunk.getPixelLength(), null);
 		}
 		for (int i = 0; i < chunks.size(); ++i)
 		{
-
+			Chunk c = chunks.get(i);
+			if (c instanceof Village)
+			{
+				for (Villager v : ((Village) c).getPopulation())
+				{
+					gI.drawImage(v.draw(), v.getX(), v.getY(), null);
+					//will draw villager's multiple times
+				}
+			}
 		}
 		gI.dispose();
 		return image;

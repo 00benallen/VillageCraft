@@ -7,11 +7,11 @@ import resources.Proffession;
 import resources.Tool;
 
 public class Villager implements ScreenComponent{
-	private boolean adult, alive;
-	private int health, hunger, thirst, armor;
-	private Tool tool;
+	private volatile boolean adult, alive;
+	private volatile int health, hunger, thirst, armor;
+	private volatile Tool tool;
 	public static final int initHealth = 20, initHunger = 20, initThirst = 20;
-	private Proffession proffession;
+	private volatile Proffession proffession;
 	
 	private int x, y;
 	

@@ -3,7 +3,7 @@ package world;
 import java.awt.image.BufferedImage;
 
 public class CityHall extends Building {
-	private int unrest = 0;
+	private volatile int unrest = 0;
 	
 	@Override
 	public void update()

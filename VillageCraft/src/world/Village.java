@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import main.Render;
 
 public class Village extends Chunk{
-	private int sizeRank;
-	private ArrayList<Villager> population;
-	private Building[][] buildings;
+	private volatile int sizeRank;
+	private volatile ArrayList<Villager> population;
+	private volatile Building[][] buildings;
 	//private int[] resources = new int[Chunk.NUM_RSRCE_TYPES];
 	private int updateCount = 0, drawCount = 0; //prevents multiple updates resulting from multiple chunk occupancies
 		
@@ -84,9 +84,9 @@ public class Village extends Chunk{
 			{
 				if (buildings[i][j] != null)
 				{
-					gI.drawImage(buildings[i][j].draw(), (i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, null);
-					gI.setColor(Color.orange);
-					gI.fillRect((i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, 6, 6);
+					gI.drawImage(buildings[i][j].draw(), (i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, Chunk.lengthOfBuilding, Chunk.lengthOfBuilding, null);
+					//gI.setColor(Color.orange);
+					//gI.fillRect((i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, 6, 6);
 					//gI.fillRect(0, 0, 6, 6);
 					//g.fillRect(55+i*lengthOfBuilding, 65+j*lengthOfBuilding, 6, 6);
 				}
