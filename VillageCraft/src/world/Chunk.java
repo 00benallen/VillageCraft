@@ -29,13 +29,13 @@ public class Chunk implements ScreenComponent{
 	
 	@Override
 	public BufferedImage draw(Graphics2D g) {
-		BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
 		Graphics gI = image.getGraphics();
 		
 		if (Render.drawChunkBoundaries)
 		{
 			gI.setColor(Color.black);
-			gI.fillRect(0, 0, Chunk.getPixelLength()-1, Chunk.getPixelLength()-1);
+			gI.drawRect(0, 0, Chunk.getPixelLength()-1, Chunk.getPixelLength()-1);
 		}
 
 		return image;

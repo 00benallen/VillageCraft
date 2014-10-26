@@ -33,6 +33,7 @@ public class Render implements Runnable {
 
 	public void run() {
 		while(Main.running) {
+			//*
 			synchronized(this) {
 				if(waiting) {
 					try {
@@ -42,9 +43,21 @@ public class Render implements Runnable {
 					}
 				}
 			}
+			//*/
 			
 			draw();
 			pause();
+			
+			/*	Why not just put the wait() down here like this, and get rid of waiting?
+			synchronized(this) 
+			{
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			//*/
 		}
 	}
 	
