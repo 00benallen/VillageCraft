@@ -2,7 +2,6 @@ package world;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import main.Render;
@@ -28,14 +27,15 @@ public class Chunk implements ScreenComponent{
 	}
 	
 	@Override
-	public BufferedImage draw(Graphics2D g) {
-		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
+	public BufferedImage draw()
+	{
+		BufferedImage image = new BufferedImage(Chunk.getPixelLength()+1, Chunk.getPixelLength()+1, BufferedImage.TYPE_INT_ARGB);
 		Graphics gI = image.getGraphics();
 		
 		if (Render.drawChunkBoundaries)
 		{
 			gI.setColor(Color.black);
-			gI.drawRect(0, 0, Chunk.getPixelLength()-1, Chunk.getPixelLength()-1);
+			gI.drawRect(0, 0, Chunk.getPixelLength(), Chunk.getPixelLength());
 		}
 
 		return image;

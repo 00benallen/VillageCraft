@@ -1,10 +1,7 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-
-import world.World;
 
 public class Render implements Runnable {
 	Graphics2D g;
@@ -12,7 +9,7 @@ public class Render implements Runnable {
 	boolean waiting;
 	
 	
-	public static final boolean drawChunkBoundaries = true;
+	public static final boolean drawChunkBoundaries = false;
 	public Render(Graphics2D g) {
 		this.g = g;
 	}
@@ -68,7 +65,7 @@ public class Render implements Runnable {
 	}
 	
 	public void drawWorld() {
-		g.drawImage(Main.getLoadedWorld().draw(g), 0, 0, null);
+		g.drawImage(Main.getLoadedWorld().draw(), 0, 0, null);
 	}
 
 	public void drawGround() {

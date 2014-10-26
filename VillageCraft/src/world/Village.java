@@ -65,17 +65,15 @@ public class Village extends Chunk{
 	}
 	
 	@Override
-	public BufferedImage draw(Graphics2D g) 
+	public BufferedImage draw()
 	{
-		g.setColor(Color.red);
-
-		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(Chunk.getPixelLength()+1, Chunk.getPixelLength()+1, BufferedImage.TYPE_INT_ARGB);
 		Graphics gI = image.getGraphics();
 		
 		if (Render.drawChunkBoundaries)
 		{
 			gI.setColor(Color.red);
-			gI.drawRect(0, 0, Chunk.getPixelLength()-1, Chunk.getPixelLength()-1);
+			gI.drawRect(0, 0, Chunk.getPixelLength(), Chunk.getPixelLength());
 		}
 		
 		int chunkX = drawCount%getChunkSideLength(), chunkY = drawCount/getChunkSideLength();
@@ -86,7 +84,7 @@ public class Village extends Chunk{
 			{
 				if (buildings[i][j] != null)
 				{
-					gI.drawImage(buildings[i][j].draw(g), (i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, null);
+					gI.drawImage(buildings[i][j].draw(), (i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, null);
 					gI.setColor(Color.orange);
 					gI.fillRect((i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, 6, 6);
 					//gI.fillRect(0, 0, 6, 6);

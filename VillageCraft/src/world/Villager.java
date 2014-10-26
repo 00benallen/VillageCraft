@@ -1,7 +1,6 @@
 package world;
 
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import resources.Proffession;
@@ -33,7 +32,7 @@ public class Villager implements ScreenComponent{
 	}
 	
 	@Override
-	public BufferedImage draw(Graphics2D g) 
+	public BufferedImage draw()
 	{
 		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 	}
