@@ -9,7 +9,7 @@ public class Render implements Runnable {
 	boolean waiting;
 	
 	
-	public static final boolean drawChunkBoundaries = false;
+	public static final boolean drawChunkBoundaries = true;
 	public Render(Graphics2D g) {
 		this.g = g;
 	}

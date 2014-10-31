@@ -87,14 +87,16 @@ public class Village extends Chunk{
 					gI.drawImage(buildings[i][j].draw(), (i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, Chunk.lengthOfBuilding, Chunk.lengthOfBuilding, null);
 					//gI.setColor(Color.orange);
 					//gI.fillRect((i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, 6, 6);
-					//gI.fillRect(0, 0, 6, 6);
-					//g.fillRect(55+i*lengthOfBuilding, 65+j*lengthOfBuilding, 6, 6);
 				}
 			}
 		}
 		
 		++drawCount;
-		if (drawCount == getNumChunks()-1 || getNumChunks() == 0)
+		if (drawCount >= getNumChunks())
+		{
+			drawCount -= getNumChunks();
+		}
+		else if (getNumChunks() == 0)
 		{
 			drawCount = 0;
 		}
@@ -129,11 +131,10 @@ public class Village extends Chunk{
 			for (int jNew = Math.max(0, newSizeRank-sizeRank)*16, jOld = Math.max(0, sizeRank-newSizeRank)*16; jNew < minSideLength|| jOld < minSideLength; ++jNew, ++jOld)
 			{
 				newBuildings[iNew][jNew] = buildings[iOld][jOld];
-			}			
+			}
 		}
 		buildings = newBuildings;
 		sizeRank = newSizeRank;
-		
 	}
 	public int getSizeRank() {return this.sizeRank;}
 	
@@ -166,6 +167,16 @@ public class Village extends Chunk{
 		if (p.getX() > getSideLength() || p.getX() < 0 || p.getY() > getSideLength() || p.getY() < 0)
 			return false;
 		return true;
+	}
+	
+	public Point2D getRelativeCenter()
+	{
+		return new Point2D.Double(getSideLength()/2.0, getSideLength()/2.0);
+	}
+	
+	public Point2D getRelativeChunkCenter()
+	{
+		return new Point2D.Double(getChunkSideLength()/2.0, getChunkSideLength()/2.0);
 	}
 	
 	public int getPixelSideLength() {return getPixelSideLength(this.getSizeRank());}

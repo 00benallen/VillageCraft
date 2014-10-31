@@ -1,6 +1,9 @@
 package world;
 
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import resources.Proffession;
@@ -13,7 +16,7 @@ public class Villager implements ScreenComponent{
 	public static final int initHealth = 20, initHunger = 20, initThirst = 20;
 	private volatile Proffession proffession;
 	
-	private int x, y;
+	private volatile Point2D pos;
 	
 	public Villager() {
 		this.setAdult(true);
@@ -24,6 +27,7 @@ public class Villager implements ScreenComponent{
 		this.setThirst(initThirst);
 		this.setTool(null);
 		this.setArmor(0);
+		pos = new Point2D.Double();
 	}
 	
 	public void update()
@@ -34,12 +38,26 @@ public class Villager implements ScreenComponent{
 	@Override
 	public BufferedImage draw()
 	{
-		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		//TODO temporary for testing
+		BufferedImage i = new BufferedImage(6, 6, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = i.getGraphics();
+		g.setColor(Color.magenta);
+		g.fillRect(0, 0, 6, 6);
+		return i;
 	}
 	
-	public int getX() {return x;}
-	
-	public int getY() {return y;}
+	/**
+	 * @return the villager's X relative to the center of his village
+	 */
+	public double getRelativeX() {return pos.getX();}
+	/**
+	 * @return the villager's Y relative to the center of his village
+	 */
+	public double getRelativeY() {return pos.getY();}
+	/**
+	 * @return the villager's position relative to the center of his village
+	 */
+	public Point2D getRelativePos() {return pos;}
 
 	public boolean isAdult() {return adult;}
 	public void setAdult(boolean adult) {this.adult = adult;}

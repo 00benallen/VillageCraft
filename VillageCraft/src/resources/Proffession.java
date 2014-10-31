@@ -26,11 +26,16 @@ public class Proffession {
 	}
 
 	private void setHeldRsrceType() {
-		if(this.type == PROF_UNEMPLOYED) {
-			this.heldRsrceType = Chunk.RSRCE_NOTHING;
-		}
-		if(this.type == PROF_LUMBERJACK) {
-			this.heldRsrceType = Chunk.RSRCE_WOOD;
+		switch (this.type)
+		{
+			case PROF_UNEMPLOYED: {
+				this.heldRsrceType = Chunk.RSRCE_NOTHING;
+				break;
+			}
+			case PROF_LUMBERJACK: {
+				this.heldRsrceType = Chunk.RSRCE_WOOD;
+				break;
+			}
 		}
 	}
 
