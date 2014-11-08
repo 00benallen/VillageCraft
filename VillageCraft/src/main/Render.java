@@ -60,8 +60,8 @@ public class Render implements Runnable {
 	
 	public void draw()
 	{
-		drawWorld();
 		//drawGround();
+		drawWorld();
 	}
 	
 	public void drawWorld() {

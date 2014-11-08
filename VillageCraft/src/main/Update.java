@@ -1,5 +1,7 @@
 package main;
 
+import java.io.FileNotFoundException;
+
 import world.World;
 import gen.WorldBuilder;
 
@@ -7,7 +9,12 @@ public class Update {
 	private World loadedWorld;
 	
 	public void init() {
-		loadedWorld = WorldBuilder.generateWorld("World1.txt");
+		try {
+			loadedWorld = new World("World1.txt");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		loadedWorld.generate();
 	}
 	
 	public void update() {

@@ -7,15 +7,21 @@ import java.util.ArrayList;
 
 import main.Render;
 
-public class Village extends Chunk{
+public class Village{
+	private final int x, y;
 	private volatile int sizeRank;
+	private int growth = 0;
 	private volatile ArrayList<Villager> population;
 	private volatile Building[][] buildings;
 	//private int[] resources = new int[Chunk.NUM_RSRCE_TYPES];
-	private int updateCount = 0, drawCount = 0; //prevents multiple updates resulting from multiple chunk occupancies
-		
-	public Village(int biome, ArrayList<Villager> population, int initResources) {
-		super(biome, initResources);
+	
+	//private int updateCount = 0, drawCount = 0; //prevents multiple updates resulting from multiple chunk occupancies
+	
+	public static final Color chunkBoundColor = Color.red;
+	
+	public Village(ArrayList<Villager> population, int x, int y) {
+		this.x = x;
+		this.y = y;
 		this.population = new ArrayList<Villager>();
 		this.addPopulation(population);
 		constructCityHall();
@@ -35,49 +41,31 @@ public class Village extends Chunk{
 		buildings[y+1][x+1] = cityHall;
 	}
 	
-	@Override
 	public void update()
 	{
-		if (updateCount == 0)  //prevents multiple updates resulting from multiple chunk occupancies
+		for (int i = 0; i < population.size(); ++i)
 		{
-			for (int i = 0; i < population.size(); ++i)
+			population.get(i).update();
+		}
+		
+		for (int i = 0; i < buildings.length; ++i)
+		{
+			for (int j = 0; j < buildings[i].length; ++j)
 			{
-				population.get(i).update();
-			}
-			
-			for (int i = 0; i < buildings.length; ++i)
-			{
-				for (int j = 0; j < buildings[i].length; ++j)
+				if (buildings[i][j] != null)
 				{
-					if (buildings[i][j] != null)
-					{
-						buildings[i][j].update();
-					}
+					buildings[i][j].update();
 				}
 			}
 		}
-		
-		++updateCount;
-		if (updateCount == getNumChunks()-1 || getNumChunks() == 0)
-		{
-			updateCount = 0;
-		}
 	}
 	
-	@Override
-	public BufferedImage draw()
+	public BufferedImage draw(int chunkX, int chunkY)
 	{
 		BufferedImage image = new BufferedImage(Chunk.getPixelLength()+1, Chunk.getPixelLength()+1, BufferedImage.TYPE_INT_ARGB);
 		Graphics gI = image.getGraphics();
 		
-		if (Render.drawChunkBoundaries)
-		{
-			gI.setColor(Color.red);
-			gI.drawRect(0, 0, Chunk.getPixelLength(), Chunk.getPixelLength());
-		}
-		
-		int chunkX = drawCount%getChunkSideLength(), chunkY = drawCount/getChunkSideLength();
-		int x0 = (chunkX)*Chunk.lengthOfChunk, y0 = (chunkY)*Chunk.lengthOfChunk;
+		int x0 = chunkX*Chunk.lengthOfChunk, y0 = chunkY*Chunk.lengthOfChunk;
 		for (int i = x0; i < x0+Chunk.lengthOfChunk; ++i)
 		{
 			for (int j = y0; j < y0+Chunk.lengthOfChunk; ++j)
@@ -85,22 +73,11 @@ public class Village extends Chunk{
 				if (buildings[i][j] != null)
 				{
 					gI.drawImage(buildings[i][j].draw(), (i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, Chunk.lengthOfBuilding, Chunk.lengthOfBuilding, null);
-					//gI.setColor(Color.orange);
-					//gI.fillRect((i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, 6, 6);
+					gI.setColor(Color.orange);
+					gI.fillRect((i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, 6, 6);
 				}
 			}
 		}
-		
-		++drawCount;
-		if (drawCount >= getNumChunks())
-		{
-			drawCount -= getNumChunks();
-		}
-		else if (getNumChunks() == 0)
-		{
-			drawCount = 0;
-		}
-		
 		return image;
 	}
 	
@@ -121,22 +98,27 @@ public class Village extends Chunk{
 		return population;
 	}
 	
-	//TODO this errors Daniel please fix!
+	//TODO this errors Daniel please fix! ****** I think I fixed it
 	public void setSizeRank(int population) {
 		int newSizeRank = population/10 + 1;
-		int minSideLength = getSideLength(Math.min(newSizeRank, sizeRank));
-		Building[][] newBuildings = new Building[getSideLength(newSizeRank)][getSideLength(newSizeRank)];
-		for (int iNew = Math.max(0, newSizeRank-sizeRank)*16, iOld = Math.max(0, sizeRank-newSizeRank)*16; iNew < minSideLength|| iOld < minSideLength; ++iNew, ++iOld)
+		if (newSizeRank != sizeRank)
 		{
-			for (int jNew = Math.max(0, newSizeRank-sizeRank)*16, jOld = Math.max(0, sizeRank-newSizeRank)*16; jNew < minSideLength|| jOld < minSideLength; ++jNew, ++jOld)
+			int minSideLength = getSideLength(Math.min(newSizeRank, sizeRank));
+			Building[][] newBuildings = new Building[getSideLength(newSizeRank)][getSideLength(newSizeRank)];
+			for (int iNew = Math.max(0, newSizeRank-sizeRank)*16, iOld = Math.max(0, sizeRank-newSizeRank)*16; iNew < minSideLength|| iOld < minSideLength; ++iNew, ++iOld)
 			{
-				newBuildings[iNew][jNew] = buildings[iOld][jOld];
+				for (int jNew = Math.max(0, newSizeRank-sizeRank)*16, jOld = Math.max(0, sizeRank-newSizeRank)*16; jNew < minSideLength|| jOld < minSideLength; ++jNew, ++jOld)
+				{
+					newBuildings[iNew][jNew] = buildings[iOld][jOld];
+				}
 			}
+			
+			growth += newSizeRank - sizeRank;
+
+			buildings = newBuildings;
+			sizeRank = newSizeRank;
 		}
-		buildings = newBuildings;
-		sizeRank = newSizeRank;
 	}
-	public int getSizeRank() {return this.sizeRank;}
 	
 	public boolean addBuilding(Building newBuilding, Point2D location) {
 		if (!isInVillage(location))
@@ -159,6 +141,15 @@ public class Village extends Chunk{
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//	GETTERS AND SETTERS
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public int getSizeRank() {return this.sizeRank;}
+	
+	public int getGrowth() {return growth; }
+	public void resetGrowth() { growth = 0; }
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	HELPER METHODS
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -169,11 +160,14 @@ public class Village extends Chunk{
 		return true;
 	}
 	
+	public Point2D getRelativePixelCenter()
+	{
+		return new Point2D.Double(getPixelSideLength()/2.0, getPixelSideLength()/2.0);		
+	}
 	public Point2D getRelativeCenter()
 	{
 		return new Point2D.Double(getSideLength()/2.0, getSideLength()/2.0);
-	}
-	
+	}	
 	public Point2D getRelativeChunkCenter()
 	{
 		return new Point2D.Double(getChunkSideLength()/2.0, getChunkSideLength()/2.0);
@@ -202,4 +196,7 @@ public class Village extends Chunk{
 	{
 		return Math.max(0, ((sizeRank*2) - 1)*((sizeRank*2) - 1));
 	}
+
+	public int getX() {	return x; }
+	public int getY() {	return y; }
 }

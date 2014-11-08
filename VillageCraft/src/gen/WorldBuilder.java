@@ -1,5 +1,6 @@
 package gen;
 
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -13,8 +14,14 @@ import world.Villager;
 import world.World;
 
 public class WorldBuilder {
-	public static World generateWorld(String fileName) {
-		
+	private final String fileName;
+	public WorldBuilder(String fileName)
+	{
+		this.fileName = fileName;
+	}
+	
+	public ArrayList<Chunk> generateWorld()
+	{	
 		Scanner s = null;
 		try {
 			s = new Scanner(new File(fileName));
@@ -28,14 +35,14 @@ public class WorldBuilder {
 		int size = Integer.parseInt(line.substring(2));
 		Random rand = new Random();
 		for(int j = 0; j < size*size; j++) {
-			chunks.add(new Chunk(rand.nextInt(4), 0));
+			chunks.add(new Chunk(rand.nextInt(4), 0, j%size, j/size));
 		}
 		
-		int center = chunks.size()/2;
+		int center = (int) Math.sqrt(chunks.size())/2;
 		ArrayList<Villager> populationCenter = new ArrayList<Villager>();
 		populationCenter.add(new Villager());
-		Village village = new Village(chunks.get(center).getBiome(), populationCenter, 0);
-		chunks.set(center, village);
+		Village village = new Village(populationCenter, center, center);
+		chunks.get(chunks.size()/2).addVillage(village, new Point2D.Double());
 		populationCenter.add(new Villager());
 		populationCenter.add(new Villager());
 		populationCenter.add(new Villager());
@@ -47,11 +54,8 @@ public class WorldBuilder {
 		populationCenter.add(new Villager());
 		village.addPopulation(populationCenter);
 		
-		
-		
-		World world = new World(chunks);
 		s.close();
-		return world;
+		return chunks;
 	}
 
 }
