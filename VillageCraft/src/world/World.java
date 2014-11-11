@@ -14,6 +14,9 @@ public class World implements ScreenComponent{
 	
 	private WorldBuilder worldBuilder;
 	private ChunkLoader chunkLoader;
+	//I don't like this, and would like to make worldBuilder have a chunkLoader object, which it would use to initially generate the world,
+	//and generate all new chunks after that, with current calls to the chunkLoader instead calling a method in world builder,
+	//but I'm not sure what the best way of doing that is
 	
 	public World(String fileName) throws FileNotFoundException {
 		worldBuilder = new WorldBuilder(fileName);
