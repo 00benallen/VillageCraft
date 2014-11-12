@@ -98,7 +98,6 @@ public class Village{
 		return population;
 	}
 	
-	//TODO this errors Daniel please fix! ****** I think I fixed it
 	public void setSizeRank(int population) {
 		int newSizeRank = population/10 + 1;
 		if (newSizeRank != sizeRank)
