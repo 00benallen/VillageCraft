@@ -27,7 +27,6 @@ public class GraphicsMain {
 		frame.pack();
 		frame.setVisible(true);
 		g = (Graphics2D) frame.getContentPane().getGraphics();
-		//g = (Graphics2D) frame.getGraphics();
 	}
 
 	public static Graphics2D getGraphics() {
