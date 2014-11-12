@@ -6,10 +6,8 @@ import java.awt.Graphics2D;
 public class Render implements Runnable {
 	Graphics2D g;
 	Thread renderThread;
-	boolean waiting;
-	
-	
 	public static final boolean drawChunkBoundaries = true;
+	
 	public Render(Graphics2D g) {
 		this.g = g;
 	}
@@ -19,33 +17,13 @@ public class Render implements Runnable {
 		renderThread.start();
 	}
 	
-	public void pause() {
-		waiting = true;
-	}
-	
 	public synchronized void resume() {
-		waiting = false;
 		notify();
 	}
 
 	public void run() {
 		while(Main.running) {
-			//*
-			synchronized(this) {
-				if(waiting) {
-					try {
-						wait();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			//*/
-			
 			draw();
-			pause();
-			
-			/*	Why not just put the wait() down here like this, and get rid of waiting?
 			synchronized(this) 
 			{
 				try {
@@ -54,13 +32,11 @@ public class Render implements Runnable {
 					e.printStackTrace();
 				}
 			}
-			//*/
 		}
 	}
 	
-	public void draw()
-	{
-		//drawGround();
+	public void draw() {
+		drawGround();
 		drawWorld();
 	}
 	

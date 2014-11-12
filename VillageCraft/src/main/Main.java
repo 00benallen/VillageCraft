@@ -24,7 +24,6 @@ public class Main implements Runnable {
 		loadedWorld = update.getLoadedWorld();
 		render = new Render(GraphicsMain.getGraphics());
 		render.start();
-		render.pause();
 	}
 	
 	public synchronized void start() {
