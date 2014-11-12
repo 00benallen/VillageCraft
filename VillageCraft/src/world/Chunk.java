@@ -91,13 +91,4 @@ public class Chunk implements ScreenComponent{
 	public Point2D getCoords() { return new Point2D.Double(x, y); }   
 	public int getX() { return x; }
 	public int getY() { return y; }
-	
-	/*
-	public Point2D getVillageLoc()
-	{
-		return villageCoords;
-	}
-	public int getVillageX() { return (int) villageCoords.getX(); }
-	public int getVillageY() { return (int) villageCoords.getY(); }
-	*/
 }
