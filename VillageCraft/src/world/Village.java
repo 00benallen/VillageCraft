@@ -1,11 +1,10 @@
 package world;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
-import main.Render;
 
 public class Village{
 	private final int x, y;
@@ -190,8 +189,8 @@ public class Village{
 		return Math.max(0, ((sizeRank*2) - 1));
 	}
 	
-	private int getNumChunks() {return getNumChunks(this.getSizeRank());}
-	private int getNumChunks(int sizeRank)
+	public int getNumChunks() {return getNumChunks(this.getSizeRank());}
+	public int getNumChunks(int sizeRank)
 	{
 		return Math.max(0, ((sizeRank*2) - 1)*((sizeRank*2) - 1));
 	}

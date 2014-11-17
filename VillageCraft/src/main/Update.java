@@ -3,7 +3,6 @@ package main;
 import java.io.FileNotFoundException;
 
 import world.World;
-import gen.WorldBuilder;
 
 public class Update {
 	private World loadedWorld;
