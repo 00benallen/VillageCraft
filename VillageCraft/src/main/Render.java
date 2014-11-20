@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import world.Chunk;
+
 public class Render implements Runnable {
 	Graphics2D g;
 	Thread renderThread;
@@ -45,7 +47,7 @@ public class Render implements Runnable {
 	}
 	
 	public void drawWorld(Graphics2D g) {
-		g.drawImage(Main.getLoadedWorld().draw(), 0, 0, null);
+		g.drawImage(Main.getLoadedWorld().draw(-2, -2), 0, 0, null);
 	}
 
 	public void drawGround(Graphics2D g) {

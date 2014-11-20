@@ -62,7 +62,7 @@ public class World implements ScreenComponent{
 							chunkLoader.load(v.getX()+dX, v.getY()+dY);
 						}
 						//TODO decide what to do if there is already a village there
-						cur.addVillage(v, dX*-1, dY*-1);
+						cur.addVillage(v);
 					}
 				}
 			}
@@ -71,42 +71,44 @@ public class World implements ScreenComponent{
 	}
 	
 	@Override
-	public BufferedImage draw() { return draw(0, 0, getSize()*Chunk.getPixelLength()+1, getSize()*Chunk.getPixelLength()+1); }
-	
+	public BufferedImage draw() { return draw(getSize()/-2, getSize()/-2, getSize(), getSize()); }
+	public BufferedImage draw(int x, int y) { return draw(x, y, getSize(), getSize()); }
 	public BufferedImage draw(int x, int y, int width, int height)
 	{
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(width*Chunk.getPixelLength(), height*Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
 		Graphics gI = image.getGraphics();
 		
 		drawChunks(x, y, width, height, gI);
-		drawVillagers(gI);
+		drawVillagers(x, y, gI);
 		gI.dispose();
 		return image;
 	}
 	
-	private void drawChunks(int x, int y, int width, int height, Graphics gI)
+	private void drawChunks(int x0, int y0, int width, int height, Graphics gI)
 	{
-		for (int i = 0; i < chunks.size(); ++i)
+		for (int x = x0; x < x0+width; ++x)
 		{
-			Chunk c = chunks.get(i);
-			int cScreenX = c.getX()*Chunk.getPixelLength()-x, cScreenY = c.getY()*Chunk.getPixelLength()-y;
-			if (cScreenX + Chunk.getPixelLength() <= width && cScreenX >= 0 && cScreenY+Chunk.getPixelLength() <= width && cScreenY >= 0)
+			for (int y = y0; y < y0+height; ++y)
 			{
-				BufferedImage cI = c.draw();
-				gI.drawImage(cI, cScreenX, cScreenY, Chunk.getPixelLength(), Chunk.getPixelLength(), null);
+				Chunk c = getChunk(x, y);
+				int cScreenX = (x-x0)*Chunk.getPixelLength(), cScreenY = (y-y0)*Chunk.getPixelLength();
+				if (cScreenX + Chunk.getPixelLength() <= width*Chunk.getPixelLength() && cScreenX >= 0 && cScreenY+Chunk.getPixelLength() <= width*Chunk.getPixelLength() && cScreenY >= 0)
+				{
+					BufferedImage cI = c.draw();
+					gI.drawImage(cI, cScreenX, cScreenY, Chunk.getPixelLength(), Chunk.getPixelLength(), null);
+				}
 			}
 		}
 	}
 	
-	private void drawVillagers(Graphics gI)
+	private void drawVillagers(int x0, int y0, Graphics gI)
 	{
 		ArrayList<Village> villages = getVillages();
 		for (Village v : villages)
 		{
 			for (Villager villager : v.getPopulation())
 			{
-				
-				double vAbsX = villager.getRelativeX()+(v.getX()+0.5)*Chunk.lengthOfChunk-.5, vAbsY = villager.getRelativeY()+(v.getY()+0.5)*Chunk.lengthOfChunk-.5;
+				double vAbsX = villager.getRelativeX()+(v.getX()-x0+0.5)*Chunk.lengthOfChunk-0.5, vAbsY = villager.getRelativeY()+(v.getY()-y0+0.5)*Chunk.lengthOfChunk-.5;
 				gI.drawImage(villager.draw(), (int)(vAbsX*Chunk.lengthOfBuilding), (int)(vAbsY*Chunk.lengthOfBuilding), null);
 				//TODO will draw villager's multiple times right now
 			}

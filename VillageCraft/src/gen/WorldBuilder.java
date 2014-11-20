@@ -25,15 +25,19 @@ public class WorldBuilder {
 		ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 		
 		int size = 5;
-		for(int j = 0; j < size*size; j++) {
-			chunks.add(chunkLoader.load(j%size, j/size));
+		for(int j = size/(-2); j < size/2.0; j++)
+		{
+			for (int k = size/(-2); k < size/2.0; ++k)
+			{
+				chunks.add(chunkLoader.load(k, j));
+			}
 		}
 		
-		int center = (int) Math.sqrt(chunks.size())/2;
+		int center = 0;
 		ArrayList<Villager> populationCenter = new ArrayList<Villager>();
 		populationCenter.add(new Villager());
 		Village village = new Village(populationCenter, center, center);
-		chunks.get(chunks.size()/2).addVillage(village, new Point2D.Double());
+		chunks.get(chunks.size()/2).addVillage(village);
 		populationCenter.add(new Villager());
 		populationCenter.add(new Villager());
 		populationCenter.add(new Villager());

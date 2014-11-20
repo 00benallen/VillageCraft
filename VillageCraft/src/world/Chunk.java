@@ -29,8 +29,7 @@ public class Chunk implements ScreenComponent{
 		this.setResources(initResources);
 	}
 	
-	public void addVillage(Village v, int x, int y) { addVillage(v, new Point2D.Double(x, y)); }
-	public void addVillage(Village v, Point2D villageCoords)
+	public void addVillage(Village v)
 	{
 		this.village = v;
 	}
