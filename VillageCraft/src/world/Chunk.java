@@ -19,8 +19,8 @@ public class Chunk implements ScreenComponent{
 	/** stores the resource type associated with a specific biome */
 	private static final int[] biomeRsrceType = {RSRCE_NOTHING, RSRCE_WOOD};
 
+	/** the length of the chunk in buildings. ie. the number of buildings per chunk*/
 	public static final int lengthOfChunk = 16;
-	public static final int lengthOfBuilding = 8;
 
 	public Chunk(int biome, int initResources, int x, int y) {
 		this.x = x;
@@ -42,7 +42,7 @@ public class Chunk implements ScreenComponent{
 	@Override
 	public BufferedImage draw()
 	{
-		BufferedImage image = new BufferedImage(Chunk.getPixelLength()+1, Chunk.getPixelLength()+1, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
 		Graphics gI = image.getGraphics();
 		if (Render.drawChunkBoundaries)
 		{
@@ -54,7 +54,7 @@ public class Chunk implements ScreenComponent{
 			{
 				gI.setColor(Village.chunkBoundColor);
 			}
-			gI.drawRect(0, 0, Chunk.getPixelLength(), Chunk.getPixelLength());
+			gI.drawRect(0, 0, Chunk.getPixelLength()-1, Chunk.getPixelLength()-1);
 		}
 		
 		if (village != null)
@@ -73,7 +73,7 @@ public class Chunk implements ScreenComponent{
 	
 	public int getNumRsrces() {return resources;}
 	
-	public static int getPixelLength(){return lengthOfChunk*lengthOfBuilding;}
+	public static int getPixelLength(){return lengthOfChunk*Building.lengthOfBuilding;}
 	
 	public void harvest(int quantity, Villager villager)
 	{

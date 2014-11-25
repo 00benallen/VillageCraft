@@ -61,7 +61,7 @@ public class Village{
 	
 	public BufferedImage draw(int chunkX, int chunkY)
 	{
-		BufferedImage image = new BufferedImage(Chunk.getPixelLength()+1, Chunk.getPixelLength()+1, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
 		Graphics gI = image.getGraphics();
 		
 		int x0 = chunkX*Chunk.lengthOfChunk, y0 = chunkY*Chunk.lengthOfChunk;
@@ -71,9 +71,7 @@ public class Village{
 			{
 				if (buildings[i][j] != null)
 				{
-					gI.drawImage(buildings[i][j].draw(), (i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, Chunk.lengthOfBuilding, Chunk.lengthOfBuilding, null);
-					gI.setColor(Color.orange);
-					gI.fillRect((i-x0)*Chunk.lengthOfBuilding, (j-y0)*Chunk.lengthOfBuilding, 6, 6);
+					gI.drawImage(buildings[i][j].draw(), (i-x0)*Building.lengthOfBuilding, (j-y0)*Building.lengthOfBuilding, Building.lengthOfBuilding, Building.lengthOfBuilding, null);
 				}
 			}
 		}
@@ -174,7 +172,7 @@ public class Village{
 	public int getPixelSideLength() {return getPixelSideLength(this.getSizeRank());}
 	public int getPixelSideLength(int sizeRank)
 	{
-		return getSideLength(sizeRank)*Chunk.lengthOfBuilding;
+		return getSideLength(sizeRank)*Building.lengthOfBuilding;
 	}
 	
 	public int getSideLength() {return getSideLength(this.getSizeRank());}

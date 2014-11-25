@@ -1,5 +1,7 @@
 package world;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class CityHall extends Building {
@@ -14,7 +16,11 @@ public class CityHall extends Building {
 	@Override
 	public BufferedImage draw()
 	{
-		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(Building.lengthOfBuilding, Building.lengthOfBuilding, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = (Graphics2D) image.getGraphics();
+		g.setColor(Color.orange);
+		g.fillRect(0, 0, lengthOfBuilding-2, lengthOfBuilding-2);
+		return image;
 	}
 	
 	@Override

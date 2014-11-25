@@ -109,7 +109,7 @@ public class World implements ScreenComponent{
 			for (Villager villager : v.getPopulation())
 			{
 				double vAbsX = villager.getRelativeX()+(v.getX()-x0+0.5)*Chunk.lengthOfChunk-0.5, vAbsY = villager.getRelativeY()+(v.getY()-y0+0.5)*Chunk.lengthOfChunk-.5;
-				gI.drawImage(villager.draw(), (int)(vAbsX*Chunk.lengthOfBuilding), (int)(vAbsY*Chunk.lengthOfBuilding), null);
+				gI.drawImage(villager.draw(), (int)(vAbsX*Building.lengthOfBuilding), (int)(vAbsY*Building.lengthOfBuilding), null);
 				//TODO will draw villager's multiple times right now
 			}
 		}
