@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import world.Chunk;
-
 public class Render implements Runnable {
 	Graphics2D g;
 	Thread renderThread;
