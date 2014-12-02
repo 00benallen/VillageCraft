@@ -3,6 +3,7 @@ package world;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -26,21 +27,46 @@ public class Village{
 		this.y = y;
 		this.population = new ArrayList<Villager>();
 		this.addPopulation(population);
-		constructCityHall();
+		constructCity();
 	}
 	
-	private void constructCityHall()
+	public void constructCity()
+	{
+		buildings = new Building[getSideLength()][getSideLength()];
+		
+		buildCityHall();
+		buildSideWalks();
+	}
+	
+	private void buildCityHall()
 	{
 		CityHall cityHall = new CityHall();
+		Point2D loc = new Point2D.Double((getSideLength()-1)/2, (getSideLength()-1)/2);
+		try {
+			addBuilding(cityHall, loc);
+		} catch (InvalidLocationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void buildSideWalks()
+	{
+		int [] dx = {0, 1, 0, -1};
+		int [] dy = {-1, 0, 1, 0};
 
-		int sideLength = getSideLength();
-		buildings = new Building[sideLength][sideLength];
-		
-		int x = sideLength/2 - 1, y = sideLength/2 - 1;
-		buildings[x][y] = cityHall;
-		buildings[y][x+1] = cityHall;
-		buildings[y+1][x] = cityHall;
-		buildings[y+1][x+1] = cityHall;
+		int x0 = (getSideLength()-1)/2, y0 = (getSideLength()-1)/2;
+		for (int d = 0; d < 4; ++d, x0 += dx[d%4], y0 += dy[d%4])
+		{
+			for (int i = 1; i <= (Chunk.lengthOfChunk-CityHall.height)/2; ++i)
+			{
+				Point2D loc = new Point2D.Double(x0+i*dx[d], y0+i*dy[d]);
+				try {
+					addBuilding(new SideWalk(), loc);
+				} catch (InvalidLocationException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public void update()
@@ -80,24 +106,7 @@ public class Village{
 		}
 		return image;
 	}
-	
-	public void addPopulation(ArrayList<Villager> newPopulation) {
-		this.population.addAll(newPopulation);
-		setSizeRank(this.population.size());
-	}
-	
-	public void addVillager(Villager villager) {
-		this.population.add(villager);
-		setSizeRank(this.population.size());
-	}
-	
-	public int getPopulationSize() {return population.size();}
-	
-	public ArrayList<Villager> getPopulation()
-	{
-		return population;
-	}
-	
+		
 	public void setSizeRank(int population) {
 		int newSizeRank = population/10 + 1;
 		if (newSizeRank != sizeRank)
@@ -170,6 +179,23 @@ public class Village{
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	GETTERS AND SETTERS
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public void addPopulation(ArrayList<Villager> newPopulation) {
+		this.population.addAll(newPopulation);
+		setSizeRank(this.population.size());
+	}
+	
+	public void addVillager(Villager villager) {
+		this.population.add(villager);
+		setSizeRank(this.population.size());
+	}
+	
+	public int getPopulationSize() {return population.size();}
+	
+	public ArrayList<Villager> getPopulation()
+	{
+		return population;
+	}
 	
 	public int getSizeRank() {return this.sizeRank;}
 	
