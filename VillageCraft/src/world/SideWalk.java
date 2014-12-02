@@ -11,7 +11,7 @@ public class SideWalk extends Building {
 		BufferedImage image = new BufferedImage(Building.lengthOfBuilding, Building.lengthOfBuilding, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = image.createGraphics();
 		g.setColor(Color.darkGray);
-		g.fillRect(0, 0, lengthOfBuilding-2, lengthOfBuilding-2);
+		g.fillRect(1, 1, lengthOfBuilding-2, lengthOfBuilding-2);
 		return image;
 	}
 

@@ -91,8 +91,8 @@ public class Village{
 	{
 		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gI = image.createGraphics();
-		
-		int x0 = chunkX*Chunk.lengthOfChunk, y0 = chunkY*Chunk.lengthOfChunk;
+
+		int x0 = Chunk.lengthOfChunk, y0 = chunkY*Chunk.lengthOfChunk;
 		for (int i = x0; i < x0+Chunk.lengthOfChunk; ++i)
 		{
 			for (int j = y0; j < y0+Chunk.lengthOfChunk; ++j)
@@ -103,6 +103,10 @@ public class Village{
 				}
 			}
 		}
+		
+		gI.setColor(Color.pink);
+		gI.fillRect(6*8, 0, 10, 10);
+		
 		return image;
 	}
 		
