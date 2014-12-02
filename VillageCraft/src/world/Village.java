@@ -6,13 +6,16 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import exceptions.CannotDestroyBuildingException;
+import exceptions.InvalidLocationException;
+
 public class Village{
 	private final int x, y;
 	private volatile int sizeRank;
 	private int growth = 0;
 	private volatile ArrayList<Villager> population;
 	private volatile Building[][] buildings;
-	//private int[] resources = new int[Chunk.NUM_RSRCE_TYPES];
+	private int[] resources = new int[Chunk.NUM_RSRCE_TYPES];
 	
 	//private int updateCount = 0, drawCount = 0; //prevents multiple updates resulting from multiple chunk occupancies
 	
@@ -116,24 +119,52 @@ public class Village{
 		}
 	}
 	
-	public boolean addBuilding(Building newBuilding, Point2D location) {
-		if (!isInVillage(location))
-			return false;
+	public void addBuilding(Building newBuilding, Point2D location) throws InvalidLocationException {
+		if (!isInVillage(location) || !isInVillage(new Point2D.Double(location.getX()+newBuilding.getWidth(), location.getY()+newBuilding.getHeight())))
+			throw new InvalidLocationException();
 		
-		Building oldBuilding = this.buildings[(int)location.getX()][(int)location.getY()];
-		if (oldBuilding == null && !(oldBuilding instanceof CityHall))
+		for (int i = (int) location.getX(); i < location.getX()+newBuilding.getWidth(); ++i)
 		{
-			this.buildings[(int)location.getX()][(int)location.getY()] = newBuilding;
+			for (int j = (int) location.getY(); j < location.getY()+newBuilding.getHeight(); ++j)
+			{
+				if (this.buildings[i][j] != null)
+				{
+					throw new InvalidLocationException();
+				}
+			}
 		}
 		
-		return true;
+		for (int i = (int) location.getX(); i < location.getX()+newBuilding.getWidth(); ++i)
+		{
+			for (int j = (int) location.getY(); j < location.getY()+newBuilding.getHeight(); ++j)
+			{
+				this.buildings[i][j] = newBuilding;
+			}
+		}
 	}
 	
-	public boolean removeBuilding(Point2D location) {
-		if ((this.buildings[(int)location.getX()][(int)location.getY()] instanceof CityHall) || !isInVillage(location))
-			return false;
-		this.buildings[(int)location.getX()][(int)location.getY()] = null;
-		return true;
+	public void removeBuilding(Point2D location) throws InvalidLocationException, CannotDestroyBuildingException {
+		if (!isInVillage(location))
+			throw new InvalidLocationException();
+		Building toDestroy = this.buildings[(int)location.getX()][(int)location.getY()];
+		if (!isInVillage(new Point2D.Double(location.getX()+toDestroy.getWidth(), location.getY()+toDestroy.getHeight())))
+			throw new InvalidLocationException();
+		for (int i = (int) location.getX(); i < location.getX()+toDestroy.getWidth(); ++i)
+		{
+			for (int j = (int) location.getY(); j < location.getY()+toDestroy.getHeight(); ++j)
+			{
+				if (this.buildings[i][j] == null || this.buildings[i][j].isInfrastructure())
+					throw new CannotDestroyBuildingException();
+			}
+		}
+
+		for (int i = (int) location.getX(); i < location.getX()+toDestroy.getWidth(); ++i)
+		{
+			for (int j = (int) location.getY(); j < location.getY()+toDestroy.getHeight(); ++j)
+			{
+				this.buildings[i][j] = null;
+			}
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////

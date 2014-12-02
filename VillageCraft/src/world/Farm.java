@@ -3,7 +3,10 @@ package world;
 import java.awt.image.BufferedImage;
 
 public class Farm extends Building {
-
+	public static final int width = 2, height = 2;
+	
+	protected Farm() {}
+	
 	@Override
 	public void update() {
 		
@@ -16,7 +19,11 @@ public class Farm extends Building {
 	}
 
 	@Override
-	public int getType() {
-		return BuildingType.FARM.ordinal();
-	}
+	public int getType() { return BuildingType.FARM.ordinal(); }
+	@Override
+	public int getWidth() { return width; }
+	@Override
+	public int getHeight() { return height; }
+	@Override
+	public boolean isInfrastructure() { return false; }
 }

@@ -3,7 +3,7 @@ package main;
 import world.World;
 
 public class Main implements Runnable {
-	public static boolean running = true;
+	protected static boolean running = true;
 	private static Main main;
 	private Update update;
 	private Render render;
@@ -28,7 +28,7 @@ public class Main implements Runnable {
 	
 	public synchronized void start() {
 		running = true;
-		mainThread = new Thread(main, "Main Thread");
+		mainThread = new Thread(this, "Main Thread");
 		mainThread.start();
 	}
 	

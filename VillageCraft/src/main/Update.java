@@ -13,7 +13,7 @@ public class Update {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		loadedWorld.generate();
+		loadedWorld.load();
 	}
 	
 	public void update() {

@@ -23,9 +23,9 @@ public class World implements ScreenComponent{
 		chunkLoader = new ChunkLoader(fileName);
 	}
 	
-	public void generate()
+	public void load()
 	{
-		this.chunks = worldBuilder.generateWorld();
+		this.chunks = worldBuilder.loadWorld();
 	}
 	
 	public void update() {

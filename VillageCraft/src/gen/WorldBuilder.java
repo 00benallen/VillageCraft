@@ -19,6 +19,11 @@ public class WorldBuilder {
 		this.chunkLoader = new ChunkLoader(saveFile);
 	}
 	
+	public ArrayList<Chunk> loadWorld()
+	{
+		return generateWorld();
+	}
+	
 	public ArrayList<Chunk> generateWorld()
 	{		
 		ArrayList<Chunk> chunks = new ArrayList<Chunk>();
