@@ -1,7 +1,7 @@
 package world;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
@@ -43,7 +43,7 @@ public class Chunk implements ScreenComponent{
 	public BufferedImage draw()
 	{
 		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
-		Graphics gI = image.getGraphics();
+		Graphics2D gI = image.createGraphics();
 		if (Render.drawChunkBoundaries)
 		{
 			if (village == null)

@@ -1,5 +1,6 @@
 package world;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class Farm extends Building {
@@ -15,7 +16,9 @@ public class Farm extends Building {
 	@Override
 	public BufferedImage draw()
 	{
-		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D gI = image.createGraphics();
+		return image;
 	}
 
 	@Override

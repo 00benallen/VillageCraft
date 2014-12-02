@@ -3,7 +3,7 @@ package world;
 import gen.ChunkLoader;
 import gen.WorldBuilder;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class World implements ScreenComponent{
 	public BufferedImage draw(int x, int y, int width, int height)
 	{
 		BufferedImage image = new BufferedImage(width*Chunk.getPixelLength(), height*Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
-		Graphics gI = image.getGraphics();
+		Graphics2D gI = image.createGraphics();
 		
 		drawChunks(x, y, width, height, gI);
 		drawVillagers(x, y, gI);
@@ -84,7 +84,7 @@ public class World implements ScreenComponent{
 		return image;
 	}
 	
-	private void drawChunks(int x0, int y0, int width, int height, Graphics gI)
+	private void drawChunks(int x0, int y0, int width, int height, Graphics2D gI)
 	{
 		for (int x = x0; x < x0+width; ++x)
 		{
@@ -101,7 +101,7 @@ public class World implements ScreenComponent{
 		}
 	}
 	
-	private void drawVillagers(int x0, int y0, Graphics gI)
+	private void drawVillagers(int x0, int y0, Graphics2D gI)
 	{
 		ArrayList<Village> villages = getVillages();
 		for (Village v : villages)

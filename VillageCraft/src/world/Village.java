@@ -1,9 +1,8 @@
 package world;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -91,7 +90,7 @@ public class Village{
 	public BufferedImage draw(int chunkX, int chunkY)
 	{
 		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
-		Graphics gI = image.getGraphics();
+		Graphics2D gI = image.createGraphics();
 		
 		int x0 = chunkX*Chunk.lengthOfChunk, y0 = chunkY*Chunk.lengthOfChunk;
 		for (int i = x0; i < x0+Chunk.lengthOfChunk; ++i)
