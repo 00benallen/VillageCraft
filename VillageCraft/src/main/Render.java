@@ -54,7 +54,7 @@ public class Render implements Runnable {
 	}
 	
 	private void drawWorld(Graphics2D g) {
-		BufferedImage i = Main.getLoadedWorld().draw((int)screen.getMinX(), (int)screen.getMinY(), (int)screen.getWidth(), (int)screen.getHeight());
+		BufferedImage i = Main.getLoadedWorld().draw((int)screen.getMinX(), (int)screen.getMinY(), (int)Math.ceil(screen.getWidth()), (int)Math.ceil(screen.getHeight()));
 		g.drawImage(i, 0, 0, GraphicsMain.WIDTH, GraphicsMain.HEIGHT, null);
 	}
 
