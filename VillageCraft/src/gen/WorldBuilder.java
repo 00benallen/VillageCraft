@@ -28,30 +28,30 @@ public class WorldBuilder {
 	{		
 		ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 		
-		int size = 5;
-		for(int j = size/(-2); j < size/2.0; j++)
+		int initSize = 10;
+		for(int j = initSize/(-2); j < initSize/2.0; j++)
 		{
-			for (int k = size/(-2); k < size/2.0; ++k)
+			for (int k = initSize/(-2); k < initSize/2.0; ++k)
 			{
 				chunks.add(chunkLoader.load(k, j));
 			}
 		}
 		
 		int center = 0;
-		ArrayList<Villager> populationCenter = new ArrayList<Villager>();
-		populationCenter.add(new Villager());
-		Village village = new Village(populationCenter, center, center);
-		chunks.get(chunks.size()/2).addVillage(village);
-		populationCenter.add(new Villager());
-		populationCenter.add(new Villager());
-		populationCenter.add(new Villager());
-		populationCenter.add(new Villager());
-		populationCenter.add(new Villager());
-		populationCenter.add(new Villager());
-		populationCenter.add(new Villager());
-		populationCenter.add(new Villager());
-		populationCenter.add(new Villager());
-		village.addPopulation(populationCenter);
+		ArrayList<Villager> population = new ArrayList<Villager>();
+		population.add(new Villager());
+		Village village = new Village(population, center, center);
+		chunks.get((int)((initSize/2+0.5)*initSize)).addVillage(village);
+		population.add(new Villager());
+		population.add(new Villager());
+		population.add(new Villager());
+		population.add(new Villager());
+		population.add(new Villager());
+		population.add(new Villager());
+		population.add(new Villager());
+		population.add(new Villager());
+		population.add(new Villager());
+		village.addPopulation(population);
 		
 		return chunks;
 	}

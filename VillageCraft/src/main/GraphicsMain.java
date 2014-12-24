@@ -10,7 +10,6 @@ public class GraphicsMain {
 	private static JFrame frame;
 	public static final int WIDTH = 1024, HEIGHT = 768;
 	public static Graphics2D g;
-	public static final Listener listener = new Listener();
 
 	public static void init() {
 		frame = new JFrame();
@@ -18,9 +17,9 @@ public class GraphicsMain {
 
 	public static void start() {
 		frame = new JFrame("VillageCraft");
-		frame.addKeyListener(listener);
-		frame.addMouseListener(listener);
-		frame.addMouseMotionListener(listener);
+		frame.addKeyListener(Listener.universal);
+		frame.addMouseListener(Listener.universal);
+		frame.addMouseMotionListener(Listener.universal);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		frame.setResizable(false);

@@ -31,10 +31,7 @@ public class Village{
 	
 	public void constructCity()
 	{
-		buildings = new Building[getSideLength()][getSideLength()];
-		
 		buildCityHall();
-		buildSideWalks();
 	}
 	
 	private void buildCityHall()
@@ -48,15 +45,15 @@ public class Village{
 		}
 	}
 	
-	public void buildSideWalks()
+	public void buildSideWalks(int prevSize, int newSize)
 	{
 		int [] dx = {0, 1, 0, -1};
 		int [] dy = {-1, 0, 1, 0};
 
-		int x0 = (getSideLength()-1)/2, y0 = (getSideLength()-1)/2;
+		int x0 = (getSideLength(newSize)-1)/2, y0 = (getSideLength(newSize)-1)/2;
 		for (int d = 0; d < 4; ++d, x0 += dx[d%4], y0 += dy[d%4])
 		{
-			for (int i = 1; i <= (Chunk.lengthOfChunk-CityHall.height)/2; ++i)
+			for (int i = (int)(Math.max(1-prevSize, 0) + (Math.max(prevSize-0.5, 0)*Chunk.lengthOfChunk)); i <= (newSize-0.5)*Chunk.lengthOfChunk-CityHall.height/2; ++i)
 			{
 				Point2D loc = new Point2D.Double(x0+i*dx[d], y0+i*dy[d]);
 				try {
@@ -92,7 +89,7 @@ public class Village{
 		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gI = image.createGraphics();
 
-		int x0 = Chunk.lengthOfChunk, y0 = chunkY*Chunk.lengthOfChunk;
+		int x0 = chunkX*Chunk.lengthOfChunk, y0 = chunkY*Chunk.lengthOfChunk;
 		for (int i = x0; i < x0+Chunk.lengthOfChunk; ++i)
 		{
 			for (int j = y0; j < y0+Chunk.lengthOfChunk; ++j)
@@ -104,14 +101,11 @@ public class Village{
 			}
 		}
 		
-		gI.setColor(Color.pink);
-		gI.fillRect(6*8, 0, 10, 10);
-		
 		return image;
 	}
 		
-	public void setSizeRank(int population) {
-		int newSizeRank = population/10 + 1;
+	private void updateSizeRank() {
+		int newSizeRank = population.size()/10 + 1;
 		if (newSizeRank != sizeRank)
 		{
 			int minSideLength = getSideLength(Math.min(newSizeRank, sizeRank));
@@ -123,16 +117,17 @@ public class Village{
 					newBuildings[iNew][jNew] = buildings[iOld][jOld];
 				}
 			}
-			
-			growth += newSizeRank - sizeRank;
+			int newGrowth = newSizeRank - sizeRank;
+			growth += newGrowth;
 
 			buildings = newBuildings;
 			sizeRank = newSizeRank;
+			buildSideWalks(sizeRank-newGrowth, sizeRank);
 		}
 	}
 	
 	public void addBuilding(Building newBuilding, Point2D location) throws InvalidLocationException {
-		if (!isInVillage(location) || !isInVillage(new Point2D.Double(location.getX()+newBuilding.getWidth(), location.getY()+newBuilding.getHeight())))
+		if (!isInVillage(location) || !isInVillage(new Point2D.Double(location.getX()+newBuilding.getWidth()-1, location.getY()+newBuilding.getHeight()-1)))
 			throw new InvalidLocationException();
 		
 		for (int i = (int) location.getX(); i < location.getX()+newBuilding.getWidth(); ++i)
@@ -185,12 +180,12 @@ public class Village{
 	
 	public void addPopulation(ArrayList<Villager> newPopulation) {
 		this.population.addAll(newPopulation);
-		setSizeRank(this.population.size());
+		updateSizeRank();
 	}
 	
 	public void addVillager(Villager villager) {
 		this.population.add(villager);
-		setSizeRank(this.population.size());
+		updateSizeRank();
 	}
 	
 	public int getPopulationSize() {return population.size();}

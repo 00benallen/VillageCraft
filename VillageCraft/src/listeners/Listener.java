@@ -2,25 +2,28 @@ package listeners;
 
 import java.awt.event.*;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.Queue;
 
-public class Listener implements KeyListener, MouseListener, MouseMotionListener{
-	ArrayList<InputEvent> unprocessedEvents = new ArrayList<InputEvent>();
-	Point2D mouse = new Point2D.Double(-1, -1);
+public class Listener implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener, Iterable<InputEvent>{
+	private volatile Queue<InputEvent> unprocessedEvents = new ArrayDeque<InputEvent>();
+	private volatile Point2D mouse = new Point2D.Double(-1, -1);
+	
+	public static final Listener universal = new Listener();
 
 	public Point2D getMouse()
 	{
 		return (Point2D) mouse.clone();
 	}
 	
-	public InputEvent getEvent(int index)
+	public InputEvent peekAtEvent()
 	{
-		InputEvent e = unprocessedEvents.remove(index); 
-		return e;
+		return unprocessedEvents.peek();
 	}
-	public InputEvent peekAtEvent(int index)
+	public InputEvent removeEvent()
 	{
-		return unprocessedEvents.get(index);
+		return unprocessedEvents.remove(); 
 	}
 	
 	@Override
@@ -57,6 +60,12 @@ public class Listener implements KeyListener, MouseListener, MouseMotionListener
 	public void mouseMoved(MouseEvent e) {
 		mouse = e.getPoint();
 	}
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e)
+	{
+		unprocessedEvents.add(e);
+		mouse = e.getPoint();
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -69,5 +78,11 @@ public class Listener implements KeyListener, MouseListener, MouseMotionListener
 	@Override
 	public void keyTyped(KeyEvent e) {
 		unprocessedEvents.add(e);
+	}
+
+	
+	@Override
+	public Iterator<InputEvent> iterator() {
+		return unprocessedEvents.iterator();
 	}
 }

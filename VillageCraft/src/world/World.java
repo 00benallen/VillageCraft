@@ -3,10 +3,13 @@ package world;
 import gen.ChunkLoader;
 import gen.WorldBuilder;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+
+import main.GraphicsMain;
 
 public class World implements ScreenComponent{
 	
@@ -20,7 +23,6 @@ public class World implements ScreenComponent{
 	
 	public World(String fileName) throws FileNotFoundException {
 		worldBuilder = new WorldBuilder(fileName);
-		chunkLoader = new ChunkLoader(fileName);
 	}
 	
 	public void load()
@@ -71,46 +73,51 @@ public class World implements ScreenComponent{
 	}
 	
 	@Override
-	public BufferedImage draw() { return draw(getSize()/-2, getSize()/-2, getSize(), getSize()); }
-	public BufferedImage draw(int x, int y) { return draw(x, y, getSize(), getSize()); }
+	public BufferedImage draw() { return draw(GraphicsMain.WIDTH/-2, GraphicsMain.HEIGHT/-2, GraphicsMain.WIDTH, GraphicsMain.HEIGHT); }
+	public BufferedImage draw(int x, int y) { return draw(x, y, GraphicsMain.WIDTH, GraphicsMain.HEIGHT); }
 	public BufferedImage draw(int x, int y, int width, int height)
 	{
-		BufferedImage image = new BufferedImage(width*Chunk.getPixelLength(), height*Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gI = image.createGraphics();
 		
 		drawChunks(x, y, width, height, gI);
 		drawVillagers(x, y, gI);
+		//gI.setColor(Color.magenta);
+		//gI.fillRect((int)(39.5*8), (int) (39.5*8), 6, 6);;
 		gI.dispose();
 		return image;
 	}
 	
 	private void drawChunks(int x0, int y0, int width, int height, Graphics2D gI)
 	{
-		for (int x = x0; x < x0+width; ++x)
+		for (int x = x0/Chunk.getPixelLength(); x <= Math.ceil(((double)x0+width)/Chunk.getPixelLength()); ++x)
 		{
-			for (int y = y0; y < y0+height; ++y)
+			for (int y = y0/Chunk.getPixelLength(); y <= Math.ceil(((double)y0+height)/Chunk.getPixelLength()); ++y)
 			{
 				Chunk c = getChunk(x, y);
-				int cScreenX = (x-x0)*Chunk.getPixelLength(), cScreenY = (y-y0)*Chunk.getPixelLength();
-				if (cScreenX + Chunk.getPixelLength() <= width*Chunk.getPixelLength() && cScreenX >= 0 && cScreenY+Chunk.getPixelLength() <= width*Chunk.getPixelLength() && cScreenY >= 0)
+				int cScreenX = (int)((x-0.5)*Chunk.getPixelLength()-x0), cScreenY = (int)((y-0.5)*Chunk.getPixelLength()-y0);
+				if (cScreenX <= width && cScreenX+Chunk.getPixelLength() >= 0 && cScreenY <= width && cScreenY+Chunk.getPixelLength() >= 0)
 				{
 					BufferedImage cI = c.draw();
 					gI.drawImage(cI, cScreenX, cScreenY, Chunk.getPixelLength(), Chunk.getPixelLength(), null);
+				}
+				else //Check shouldn't fail!!!
+				{
+					System.out.println("WHOOPS! Check src.world.World.drawChunks()!");
 				}
 			}
 		}
 	}
 	
-	private void drawVillagers(int x0, int y0, Graphics2D gI)
+	private void drawVillagers(int screenX0, int screenY0, Graphics2D gI)
 	{
 		ArrayList<Village> villages = getVillages();
 		for (Village v : villages)
 		{
 			for (Villager villager : v.getPopulation())
 			{
-				double vAbsX = villager.getRelativeX()+(v.getX()-x0+0.5)*Chunk.lengthOfChunk-0.5, vAbsY = villager.getRelativeY()+(v.getY()-y0+0.5)*Chunk.lengthOfChunk-.5;
-				gI.drawImage(villager.draw(), (int)(vAbsX*Building.lengthOfBuilding), (int)(vAbsY*Building.lengthOfBuilding), null);
-				//TODO will draw villager's multiple times right now
+				double vAbsX = villager.getRelativeX()+(v.getX()-screenX0+0.5)*Chunk.lengthOfChunk-0.5, vAbsY = villager.getRelativeY()+(v.getY()-screenY0+0.5)*Chunk.lengthOfChunk-0.5;
+				//gI.drawImage(villager.draw(), (int)(vAbsX*Building.lengthOfBuilding), (int)(vAbsY*Building.lengthOfBuilding), null);
 			}
 		}
 	}
@@ -192,12 +199,5 @@ public class World implements ScreenComponent{
 	
 	public void setChunks(ArrayList<Chunk> chunks) {
 		this.chunks = chunks;
-	}
-
-	/**
-	 * @return the size of the world, in chunks
-	 */
-	public int getSize() {
-		return (int)Math.sqrt(chunks.size());
 	}
 }
