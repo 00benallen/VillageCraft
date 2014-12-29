@@ -56,7 +56,7 @@ public class Update {
 	{
 		if (e instanceof MouseWheelEvent)
 		{
-			Render.zoom(((MouseWheelEvent) e).getScrollAmount(), e.getPoint());
+			Render.zoom(((MouseWheelEvent) e).getWheelRotation(), e.getPoint());
 		}
 	}
 
