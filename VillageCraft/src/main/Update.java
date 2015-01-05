@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Point;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
 
@@ -59,9 +60,9 @@ public class Update {
 	{
 		if (e instanceof MouseWheelEvent)
 		{
-			//TODO fix bug
-			//e.getPoint returns and on screen co-ordinate, have to convert to world co-ordinate1
-			Render.zoom(((MouseWheelEvent) e).getWheelRotation()*-1, e.getPoint());
+			Point p = e.getPoint();
+			p.translate((int)Render.getScreen().getMinX(), (int)Render.getScreen().getMinY());
+			Render.zoom(((MouseWheelEvent) e).getWheelRotation()*-1, p);
 		}
 	}
 

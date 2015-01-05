@@ -14,12 +14,10 @@ import main.GraphicsMain;
 public class World implements ScreenComponent{
 	
 	private volatile ArrayList<Chunk> chunks;
+	public volatile int numEditChunkLocks = 0;
+	public volatile int numChunkEditingThreads = 0;
 	
 	private WorldBuilder worldBuilder;
-	private ChunkLoader chunkLoader;
-	//I don't like this, and would like to make worldBuilder have a chunkLoader object, which it would use to initially generate the world,
-	//and generate all new chunks after that, with current calls to the chunkLoader instead calling a method in world builder,
-	//but I'm not sure what the best way of doing that is
 	
 	public World(String fileName) throws FileNotFoundException {
 		worldBuilder = new WorldBuilder(fileName);
@@ -27,7 +25,9 @@ public class World implements ScreenComponent{
 	
 	public void load()
 	{
+		destabalizeChunks();
 		this.chunks = worldBuilder.loadWorld();
+		stabalizeChunks();
 	}
 	
 	public void update() {
@@ -59,10 +59,6 @@ public class World implements ScreenComponent{
 					if (dX < oldVillageChunkLength*-1 || dX > oldVillageChunkLength || dY < oldVillageChunkLength*-1 || dY > oldVillageChunkLength)
 					{
 						Chunk cur = getChunk(v.getX()+dX, v.getY()+dY);
-						if (cur == null)
-						{
-							chunkLoader.load(v.getX()+dX, v.getY()+dY);
-						}
 						//TODO decide what to do if there is already a village there
 						cur.addVillage(v);
 					}
@@ -82,17 +78,15 @@ public class World implements ScreenComponent{
 		
 		drawChunks(x, y, width, height, gI);
 		drawVillagers(x, y, gI);
-		//gI.setColor(Color.magenta);
-		//gI.fillRect((int)(39.5*8), (int) (39.5*8), 6, 6);;
 		gI.dispose();
 		return image;
 	}
 	
 	private void drawChunks(int x0, int y0, int width, int height, Graphics2D gI)
 	{
-		for (int x = (int) ((x0-0.5)/Chunk.getPixelLength()); x <= Math.ceil(((double)x0+width)/Chunk.getPixelLength()); ++x)
+		for (int x = (int) ((x0-.0)/Chunk.getPixelLength()-0.5); x <= Math.ceil(((double)x0+width)/Chunk.getPixelLength()); ++x)
 		{
-			for (int y = (int) ((y0-0.5)/Chunk.getPixelLength()); y <= Math.ceil(((double)y0+height)/Chunk.getPixelLength()); ++y)
+			for (int y = (int) ((y0-.0)/Chunk.getPixelLength()-0.5); y <= Math.ceil(((double)y0+height)/Chunk.getPixelLength()); ++y)
 			{
 				Chunk c = getChunk(x, y);
 				int cScreenX = (int)((x-0.5)*Chunk.getPixelLength()-x0), cScreenY = (int)((y-0.5)*Chunk.getPixelLength()-y0);
@@ -136,6 +130,7 @@ public class World implements ScreenComponent{
 	private ArrayList<Chunk> getGrownVillageChunks()
 	{
 		ArrayList<Chunk> grownVillageChunks = new ArrayList<Chunk>();
+		lockEditChunks();
 		for (Chunk c : chunks)
 		{
 			if (c.hasVillage() && c.getVillage().getGrowth() != 0)
@@ -143,12 +138,17 @@ public class World implements ScreenComponent{
 				grownVillageChunks.add(c);
 			}
 		}
+		unlockEditChunks();
 		return grownVillageChunks;
 	}
 	
 	private ArrayList<Village> getVillages()
 	{
 		ArrayList<Village> villages = new ArrayList<Village>();
+		// Iterator has issues when the ArrayList is modified. 
+		// if the draw thread tries to zoom out and load new chunks during the time this loop is iterating,
+		// the thread will crash
+		lockEditChunks();
 		for (Chunk c : chunks)
 		{
 			if (c.hasVillage() && !villages.contains(c.getVillage()))
@@ -156,12 +156,14 @@ public class World implements ScreenComponent{
 				villages.add(c.getVillage());
 			}
 		}
+		unlockEditChunks();
 		return villages;
 	}
 	
 	private ArrayList<Chunk> getVillageChunks()
 	{
 		ArrayList<Chunk> villageChunks = new ArrayList<Chunk>();
+		lockEditChunks();
 		for (Chunk c : chunks)
 		{
 			if (c.hasVillage())
@@ -169,6 +171,7 @@ public class World implements ScreenComponent{
 				villageChunks.add(c);
 			}
 		}
+		unlockEditChunks();
 		return villageChunks;
 	}
 
@@ -179,22 +182,59 @@ public class World implements ScreenComponent{
 	/*/
 	public Chunk getChunk(int x, int y)
 	{
+		lockEditChunks();
 		for (Chunk c : chunks)
 		{
 			if (c.getX() == x && c.getY() == y)
 			{
+				unlockEditChunks();
 				return c;
 			}
 		}
-		return null;
+		unlockEditChunks();
+		
+		destabalizeChunks();
+		//TODO load Chunks in another thread, meanwhile null chunks are ignored
+		Chunk newChunk = worldBuilder.getChunkLoader().load(x, y);
+		chunks.add(newChunk);
+		stabalizeChunks();
+		return newChunk;
 	}
 	//*/
-
-	public void addChunk(Chunk chunk) {
-		this.chunks.add(chunk);
+		
+	public void lockEditChunks()
+	{
+		while(this.numChunkEditingThreads > 0)
+		{
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		++this.numEditChunkLocks;
+	}
+	public void unlockEditChunks()
+	{
+		--this.numEditChunkLocks;
 	}
 	
-	public void setChunks(ArrayList<Chunk> chunks) {
-		this.chunks = chunks;
+	public void destabalizeChunks()
+	{
+		while(this.numEditChunkLocks > 0)
+		{
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		++this.numChunkEditingThreads;
+	}
+	public void stabalizeChunks()
+	{
+		--this.numChunkEditingThreads;
 	}
 }

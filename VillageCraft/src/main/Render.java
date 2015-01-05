@@ -70,4 +70,9 @@ public class Render implements Runnable {
 		double x0 = screen.getMinX(), y0 = screen.getMinY(), cX = origin.getX(), cY = origin.getY();
 		screen = new Rectangle2D.Double(cX+(x0-cX)*curZoomFactor, cY+(y0-cY)*curZoomFactor, screen.getWidth()*curZoomFactor, screen.getHeight()*curZoomFactor);
 	}
+	
+	public static Rectangle2D getScreen()
+	{
+		return (Rectangle2D) screen.clone();
+	}
 }

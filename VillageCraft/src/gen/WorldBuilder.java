@@ -56,4 +56,8 @@ public class WorldBuilder {
 		return chunks;
 	}
 
+	public ChunkLoader getChunkLoader()
+	{
+		return chunkLoader;
+	}
 }
