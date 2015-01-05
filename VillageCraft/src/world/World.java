@@ -90,21 +90,18 @@ public class World implements ScreenComponent{
 	
 	private void drawChunks(int x0, int y0, int width, int height, Graphics2D gI)
 	{
-		for (int x = x0/Chunk.getPixelLength(); x <= Math.ceil(((double)x0+width)/Chunk.getPixelLength()); ++x)
+		for (int x = (int) ((x0-0.5)/Chunk.getPixelLength()); x <= Math.ceil(((double)x0+width)/Chunk.getPixelLength()); ++x)
 		{
-			for (int y = y0/Chunk.getPixelLength(); y <= Math.ceil(((double)y0+height)/Chunk.getPixelLength()); ++y)
+			for (int y = (int) ((y0-0.5)/Chunk.getPixelLength()); y <= Math.ceil(((double)y0+height)/Chunk.getPixelLength()); ++y)
 			{
 				Chunk c = getChunk(x, y);
 				int cScreenX = (int)((x-0.5)*Chunk.getPixelLength()-x0), cScreenY = (int)((y-0.5)*Chunk.getPixelLength()-y0);
-				if (cScreenX <= width && cScreenX+Chunk.getPixelLength() >= 0 && cScreenY <= width && cScreenY+Chunk.getPixelLength() >= 0)
-				{
-					BufferedImage cI = c.draw();
-					gI.drawImage(cI, cScreenX, cScreenY, Chunk.getPixelLength(), Chunk.getPixelLength(), null);
-				}
-				else //Check shouldn't fail!!!
+				if (!(cScreenX <= width && cScreenX+Chunk.getPixelLength() >= 0 && cScreenY <= width && cScreenY+Chunk.getPixelLength() >= 0)) //Check that shouldn't fail!
 				{
 					System.out.println("WHOOPS! Check src.world.World.drawChunks()!");
 				}
+				BufferedImage cI = c.draw();
+				gI.drawImage(cI, cScreenX, cScreenY, Chunk.getPixelLength(), Chunk.getPixelLength(), null);
 			}
 		}
 	}

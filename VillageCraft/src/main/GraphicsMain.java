@@ -20,6 +20,7 @@ public class GraphicsMain {
 		frame.addKeyListener(Listener.universal);
 		frame.addMouseListener(Listener.universal);
 		frame.addMouseMotionListener(Listener.universal);
+		frame.addMouseWheelListener(Listener.universal);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		frame.setResizable(false);

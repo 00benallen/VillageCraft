@@ -43,20 +43,25 @@ public class Update {
 	
 	private void processEvent(KeyEvent e)
 	{
-		if (e.getKeyCode() == KeyEvent.VK_EQUALS || e.getKeyCode() == KeyEvent.VK_PLUS)
+		if (e.getID() != KeyEvent.KEY_RELEASED)
 		{
-			Render.zoom(1);
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_MINUS)
-		{
-			Render.zoom(-1);
+			if (e.getKeyCode() == KeyEvent.VK_EQUALS || e.getKeyCode() == KeyEvent.VK_PLUS)
+			{
+				Render.zoom(1);
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_MINUS)
+			{
+				Render.zoom(-1);
+			}
 		}
 	}
 	private void processEvent(MouseEvent e)
 	{
 		if (e instanceof MouseWheelEvent)
 		{
-			Render.zoom(((MouseWheelEvent) e).getWheelRotation(), e.getPoint());
+			//TODO fix bug
+			//e.getPoint returns and on screen co-ordinate, have to convert to world co-ordinate1
+			Render.zoom(((MouseWheelEvent) e).getWheelRotation()*-1, e.getPoint());
 		}
 	}
 
