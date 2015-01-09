@@ -1,5 +1,6 @@
 package gen;
 
+import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class WorldBuilder {
 		{
 			for (int k = initSize/(-2); k < initSize/2.0; ++k)
 			{
-				chunks.add(chunkLoader.load(k, j));
+				chunkLoader.queueLoad(new Point(k, j));
 			}
 		}
 		

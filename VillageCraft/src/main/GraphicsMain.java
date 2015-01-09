@@ -12,10 +12,6 @@ public class GraphicsMain {
 	public static Graphics2D g;
 
 	public static void init() {
-		frame = new JFrame();
-	}
-
-	public static void start() {
 		frame = new JFrame("VillageCraft");
 		frame.addKeyListener(Listener.universal);
 		frame.addMouseListener(Listener.universal);

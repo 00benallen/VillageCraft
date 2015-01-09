@@ -10,10 +10,8 @@ public class Main implements Runnable {
 	private Thread mainThread;
 	private static World loadedWorld;
 	
-	
 	public static void main(String[] args) {
 		GraphicsMain.init();
-		GraphicsMain.start();
 		main = new Main();
 		main.start();
 	}
@@ -22,6 +20,7 @@ public class Main implements Runnable {
 		update = new Update();
 		update.init();
 		loadedWorld = update.getLoadedWorld();
+		
 		render = new Render(GraphicsMain.getGraphics());
 		render.start();
 	}

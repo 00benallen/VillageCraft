@@ -2,6 +2,8 @@ package main;
 
 import java.awt.Point;
 import java.awt.event.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.FileNotFoundException;
 
 import listeners.Listener;
@@ -60,9 +62,10 @@ public class Update {
 	{
 		if (e instanceof MouseWheelEvent)
 		{
-			Point p = e.getPoint();
-			p.translate((int)Render.getScreen().getMinX(), (int)Render.getScreen().getMinY());
-			Render.zoom(((MouseWheelEvent) e).getWheelRotation()*-1, p);
+			Rectangle2D screen = Render.getScreen();
+			double pixelRatio = screen.getHeight()/GraphicsMain.HEIGHT;
+			Point p = new Point((int) (e.getPoint().x*pixelRatio+screen.getMinX()), (int) (e.getPoint().y*pixelRatio+screen.getMinY()));
+			Render.zoom(((MouseWheelEvent) e).getWheelRotation(), p);
 		}
 	}
 

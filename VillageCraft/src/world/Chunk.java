@@ -2,13 +2,14 @@ package world;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import main.Render;
 
 public class Chunk implements ScreenComponent{
-	private final int x, y;
+	private final Point loc;
 	
 	private volatile Village village;
 	
@@ -22,9 +23,8 @@ public class Chunk implements ScreenComponent{
 	/** the length of the chunk in buildings. ie. the number of buildings per chunk*/
 	public static final int lengthOfChunk = 16;
 
-	public Chunk(int biome, int initResources, int x, int y) {
-		this.x = x;
-		this.y = y;
+	public Chunk(int biome, int initResources, Point loc) {
+		this.loc = loc;
 		this.setBiome(biome);
 		this.setResources(initResources);
 	}
@@ -88,7 +88,7 @@ public class Chunk implements ScreenComponent{
 	 * returns the coordinates of this chunk relative to the origin (measured in chunks
 	 * @return the coordinates of this chunk
 	 */
-	public Point2D getCoords() { return new Point2D.Double(x, y); }   
-	public int getX() { return x; }
-	public int getY() { return y; }
+	public Point getCoords() { return loc; }   
+	public int getX() { return loc.x; }
+	public int getY() { return loc.y; }
 }

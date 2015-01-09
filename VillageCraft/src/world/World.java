@@ -1,10 +1,12 @@
 package world;
 
+import exceptions.ChunkNotLoadedException;
 import gen.ChunkLoader;
 import gen.WorldBuilder;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -49,6 +51,7 @@ public class World implements ScreenComponent{
 		ArrayList<Village> toGrow = getGrownVillages();
 		for (Village v : toGrow)
 		{
+			boolean complete = true;
 			int maxDX = (int)(v.getRelativeChunkCenter().getX());
 			int maxDY = (int)(v.getRelativeChunkCenter().getY());
 			int oldVillageChunkLength = v.getChunkSideLength(v.getSizeRank()-v.getGrowth());
@@ -58,7 +61,13 @@ public class World implements ScreenComponent{
 				{
 					if (dX < oldVillageChunkLength*-1 || dX > oldVillageChunkLength || dY < oldVillageChunkLength*-1 || dY > oldVillageChunkLength)
 					{
-						Chunk cur = getChunk(v.getX()+dX, v.getY()+dY);
+						Chunk cur;
+						try {
+							cur = getChunk(v.getX()+dX, v.getY()+dY);
+						} catch (ChunkNotLoadedException e) {
+							complete = false;
+							continue;
+						}
 						//TODO decide what to do if there is already a village there
 						cur.addVillage(v);
 					}
@@ -88,7 +97,13 @@ public class World implements ScreenComponent{
 		{
 			for (int y = (int) ((y0-.0)/Chunk.getPixelLength()-0.5); y <= Math.ceil(((double)y0+height)/Chunk.getPixelLength()); ++y)
 			{
-				Chunk c = getChunk(x, y);
+				Chunk c;
+				try {
+					c = getChunk(x, y);
+				} catch (ChunkNotLoadedException e) {
+					continue;
+				}
+				
 				int cScreenX = (int)((x-0.5)*Chunk.getPixelLength()-x0), cScreenY = (int)((y-0.5)*Chunk.getPixelLength()-y0);
 				if (!(cScreenX <= width && cScreenX+Chunk.getPixelLength() >= 0 && cScreenY <= width && cScreenY+Chunk.getPixelLength() >= 0)) //Check that shouldn't fail!
 				{
@@ -175,12 +190,7 @@ public class World implements ScreenComponent{
 		return villageChunks;
 	}
 
-	/*
-	public Chunk getChunk(int index) {
-		return chunks.get(index);
-	}
-	/*/
-	public Chunk getChunk(int x, int y)
+	public Chunk getChunk(int x, int y) throws ChunkNotLoadedException
 	{
 		lockEditChunks();
 		for (Chunk c : chunks)
@@ -193,21 +203,24 @@ public class World implements ScreenComponent{
 		}
 		unlockEditChunks();
 		
-		destabalizeChunks();
-		//TODO load Chunks in another thread, meanwhile null chunks are ignored
-		Chunk newChunk = worldBuilder.getChunkLoader().load(x, y);
-		chunks.add(newChunk);
-		stabalizeChunks();
-		return newChunk;
+		worldBuilder.getChunkLoader().queueLoad(new Point(x, y));
+		
+		throw new ChunkNotLoadedException();
 	}
-	//*/
+	
+	public void addChunk(Chunk C)
+	{
+		destabalizeChunks();
+		chunks.add(C);
+		stabalizeChunks();
+	}
 		
 	public void lockEditChunks()
 	{
 		while(this.numChunkEditingThreads > 0)
 		{
 			try {
-				Thread.sleep(10);
+				Thread.sleep(10*numEditChunkLocks);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -225,7 +238,7 @@ public class World implements ScreenComponent{
 		while(this.numEditChunkLocks > 0)
 		{
 			try {
-				Thread.sleep(10);
+				Thread.sleep(10*numEditChunkLocks);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
