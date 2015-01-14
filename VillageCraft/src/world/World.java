@@ -16,8 +16,9 @@ import main.GraphicsMain;
 public class World implements ScreenComponent{
 	
 	private volatile ArrayList<Chunk> chunks;
-	public volatile int numEditChunkLocks = 0;
-	public volatile int numChunkEditingThreads = 0;
+	public volatile ArrayList<Thread> chunkEditThreadsWaiting = new ArrayList<Thread>();
+	public volatile ArrayList<Thread> chunkAccessThreadsWaiting = new ArrayList<Thread>();
+	public volatile int chunksStability = 0; //+'ive = # threads accessing, -'ive = # threads editing
 	
 	private WorldBuilder worldBuilder;
 	
@@ -27,9 +28,13 @@ public class World implements ScreenComponent{
 	
 	public void load()
 	{
-		destabalizeChunks();
-		this.chunks = worldBuilder.loadWorld();
-		stabalizeChunks();
+		worldBuilder.loadWorld();
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void update() {
@@ -217,20 +222,35 @@ public class World implements ScreenComponent{
 		
 	public void lockEditChunks()
 	{
-		while(this.numChunkEditingThreads > 0)
+		if (this.chunksStability <= 0) //chunks is being accessed
 		{
+			this.chunkEditThreadsWaiting.add(Thread.currentThread());
 			try {
-				Thread.sleep(10*numEditChunkLocks);
+				wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		++this.numEditChunkLocks;
+		synchronized(this)
+		{
+			++this.chunksStability;
+		}
 	}
 	public void unlockEditChunks()
 	{
-		--this.numEditChunkLocks;
+		synchronized(this)
+		{
+			--this.chunksStability;
+		}
+		
+		if (chunksStability == 0)
+		{
+			while (chunkAccessThreadsWaiting.size() > 0)
+			{
+				chunkAccessThreadsWaiting.remove(0).notify();
+			}
+		}
 	}
 	
 	public void destabalizeChunks()

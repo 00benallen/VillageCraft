@@ -10,7 +10,7 @@ import world.Chunk;
 
 public class ChunkLoader implements Runnable{
 	private LinkedBlockingQueue<Point> toLoad = new LinkedBlockingQueue<Point>();
-	Thread loadingThread;
+	private Thread loadingThread;
 	//TODO !!!!!!!!!!!!!!!!!!!
 	//TODO fill in this class!
 	private final File saveFile;

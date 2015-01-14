@@ -38,11 +38,9 @@ public class WorldBuilder {
 			}
 		}
 		
-		int center = 0;
 		ArrayList<Villager> population = new ArrayList<Villager>();
 		population.add(new Villager());
-		Village village = new Village(population, center, center);
-		chunks.get((int)((initSize/2+0.5)*initSize)).addVillage(village);
+		Village village = new Village(population, 0, 0);
 		population.add(new Villager());
 		population.add(new Villager());
 		population.add(new Villager());
