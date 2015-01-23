@@ -10,15 +10,31 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.concurrent.Phaser;
 
 import main.GraphicsMain;
 
 public class World implements ScreenComponent{
 	
-	private volatile ArrayList<Chunk> chunks;
-	public volatile ArrayList<Thread> chunkEditThreadsWaiting = new ArrayList<Thread>();
-	public volatile ArrayList<Thread> chunkAccessThreadsWaiting = new ArrayList<Thread>();
-	public volatile int chunksStability = 0; //+'ive = # threads accessing, -'ive = # threads editing
+	private volatile ArrayList<Chunk> chunks = new ArrayList<Chunk>();
+	private volatile int chunksStability = 0; //+'ive = # threads accessing, -'ive = # threads editing
+	private volatile Object chunkStabilityCountLock = new Object();
+	private volatile Phaser chunkStabilityPhaser = new Phaser() {
+		protected boolean onAdvance(int phase, int registeredParties) {
+			synchronized(chunkStabilityCountLock)
+			{
+				if (registeredParties == 0)
+				{
+					chunksStability = 0;
+				}
+				else
+				{
+					chunksStability = Math.max(Math.min(chunksStability*-1, 1), -1);
+				}
+			}
+			return false;
+		}
+	};
 	
 	private WorldBuilder worldBuilder;
 	
@@ -29,20 +45,16 @@ public class World implements ScreenComponent{
 	public void load()
 	{
 		worldBuilder.loadWorld();
-		try {
-			wait();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	public void update() {
 		growVillages();
+		lockEditChunks();
 		for (Chunk c : chunks)
 		{
 			c.update();
 		}
+		unlockEditChunks();
 		
 		ArrayList<Village> villages = getVillages();
 		for (Village v : villages)
@@ -150,6 +162,7 @@ public class World implements ScreenComponent{
 	private ArrayList<Chunk> getGrownVillageChunks()
 	{
 		ArrayList<Chunk> grownVillageChunks = new ArrayList<Chunk>();
+
 		lockEditChunks();
 		for (Chunk c : chunks)
 		{
@@ -183,6 +196,7 @@ public class World implements ScreenComponent{
 	private ArrayList<Chunk> getVillageChunks()
 	{
 		ArrayList<Chunk> villageChunks = new ArrayList<Chunk>();
+		
 		lockEditChunks();
 		for (Chunk c : chunks)
 		{
@@ -220,54 +234,62 @@ public class World implements ScreenComponent{
 		stabalizeChunks();
 	}
 		
+	
+	/**
+	 *  Prevents other threads from editing <b>World.chunks</b>. 
+	 *  Calling this will freeze the thread if another thread has called <b>World.destabalizeChunks()</b>
+	 *  without calling <b>World.stabalizeChunks()</b>
+	 */
+	/*
+	 * #UnArrivedParties = # threads currently requiring stability level
+	 * #ArrivedParties = # threads waiting for opposite stability level
+	 * #RegisteredParites == 0 = no one is accessing/modifying
+	 */
 	public void lockEditChunks()
 	{
-		if (this.chunksStability <= 0) //chunks is being accessed
+		chunkStabilityPhaser.register();
+		if (this.chunkStabilityPhaser.getUnarrivedParties() > 1 && this.chunksStability < 0) //number threads currently editing > 0
 		{
-			this.chunkEditThreadsWaiting.add(Thread.currentThread());
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			this.chunkStabilityPhaser.arriveAndAwaitAdvance(); //wait until threads editing finish
 		}
-		
-		synchronized(this)
+		//SOLVED I THINK
+		//#registered threads > 0 then happened at momentary blip before decrement of chunk stability by threads waiting to modify chunks
+		//#retistered threads == 0 then no threads waiting
+		//other thread performs above check, but for a chunk stability of > 0
+		//continues past believing that no threads are waiting for stable access
+		//then begins editing, and we have a problem
+		//not only that but increment operator messes up
+		synchronized(chunkStabilityCountLock)
 		{
 			++this.chunksStability;
 		}
 	}
 	public void unlockEditChunks()
 	{
-		synchronized(this)
+		chunkStabilityPhaser.arriveAndDeregister();
+	}
+	
+	/**
+	 *  Prevents other threads requiring stability of <b>World.chunks</b> from continuing 
+	 *  Calling this will freeze the thread if another thread has called <b>World.lockEditChunks()</b>
+	 *  without calling <b>World.unlockEditChunks()</b>
+	 */
+	public void destabalizeChunks()
+	{
+		chunkStabilityPhaser.register();
+		if (this.chunkStabilityPhaser.getUnarrivedParties() > 1 && this.chunksStability > 0) //number threads currently editing > 0
+		{
+			this.chunkStabilityPhaser.arriveAndAwaitAdvance(); //wait until threads editing finish
+		}
+		
+		synchronized(chunkStabilityCountLock)
 		{
 			--this.chunksStability;
 		}
-		
-		if (chunksStability == 0)
-		{
-			while (chunkAccessThreadsWaiting.size() > 0)
-			{
-				chunkAccessThreadsWaiting.remove(0).notify();
-			}
-		}
 	}
 	
-	public void destabalizeChunks()
-	{
-		while(this.numEditChunkLocks > 0)
-		{
-			try {
-				Thread.sleep(10*numEditChunkLocks);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		++this.numChunkEditingThreads;
-	}
 	public void stabalizeChunks()
 	{
-		--this.numChunkEditingThreads;
+		chunkStabilityPhaser.arriveAndDeregister();
 	}
 }

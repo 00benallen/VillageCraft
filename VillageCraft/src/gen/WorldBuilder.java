@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import main.Main;
 import world.Chunk;
 import world.Village;
 import world.Villager;
@@ -20,15 +21,14 @@ public class WorldBuilder {
 		this.chunkLoader = new ChunkLoader(saveFile);
 	}
 	
-	public ArrayList<Chunk> loadWorld()
+	public void loadWorld()
 	{
-		return generateWorld();
+		chunkLoader.beginLoading();
+		generateWorld();
 	}
 	
-	public ArrayList<Chunk> generateWorld()
-	{		
-		ArrayList<Chunk> chunks = new ArrayList<Chunk>();
-		
+	private void generateWorld()
+	{
 		int initSize = 10;
 		for(int j = initSize/(-2); j < initSize/2.0; j++)
 		{
@@ -37,22 +37,6 @@ public class WorldBuilder {
 				chunkLoader.queueLoad(new Point(k, j));
 			}
 		}
-		
-		ArrayList<Villager> population = new ArrayList<Villager>();
-		population.add(new Villager());
-		Village village = new Village(population, 0, 0);
-		population.add(new Villager());
-		population.add(new Villager());
-		population.add(new Villager());
-		population.add(new Villager());
-		population.add(new Villager());
-		population.add(new Villager());
-		population.add(new Villager());
-		population.add(new Villager());
-		population.add(new Villager());
-		village.addPopulation(population);
-		
-		return chunks;
 	}
 
 	public ChunkLoader getChunkLoader()
