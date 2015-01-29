@@ -34,9 +34,9 @@ public class Chunk implements ScreenComponent{
 		this.village = v;
 	}
 	
-	public void update()
+	public boolean update()
 	{
-		
+		return false;
 	}
 	
 	@Override

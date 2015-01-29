@@ -37,11 +37,23 @@ public class ChunkLoader implements Runnable{
 	public void run() {
 		while (true)
 		{
+			Point p;
 			try {
-				Point p = toLoad.take();
-				Main.getLoadedWorld().addChunk(load(p));
-			} catch (InterruptedException e) {
+				p = toLoad.take();
+			}catch (InterruptedException e) {
 				e.printStackTrace();
+				continue;
+			}
+			
+			try {
+				Main.getLoadedWorld().addChunk(load(p));
+			}catch (NullPointerException e) {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				Main.getLoadedWorld().addChunk(load(p));
 			}
 		}
 	}

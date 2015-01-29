@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Phaser;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -19,7 +20,7 @@ public class World implements ScreenComponent{
 	
 	private volatile ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 	private volatile ReentrantReadWriteLock chunksLock = new ReentrantReadWriteLock(true);
-	
+	private volatile LinkedBlockingQueue<Chunk> toDraw = new LinkedBlockingQueue<Chunk>();
 	private WorldBuilder worldBuilder;
 	
 	public World(String fileName) throws FileNotFoundException {
@@ -37,7 +38,10 @@ public class World implements ScreenComponent{
 		try {
 			for (Chunk c : chunks)
 			{
-				c.update();
+				if (c.update() && !toDraw.contains(c))
+				{
+					toDraw.add(c);
+				}
 			}
 		} finally {
 			chunksLock.readLock().unlock();
@@ -74,10 +78,14 @@ public class World implements ScreenComponent{
 						}
 						//TODO decide what to do if there is already a village there
 						cur.addVillage(v);
+						toDraw.add(cur);
 					}
 				}
 			}
-			v.resetGrowth();
+			if (complete)
+			{
+				v.resetGrowth();
+			}
 		}
 	}
 	
