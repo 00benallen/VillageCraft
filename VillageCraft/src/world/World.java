@@ -118,7 +118,7 @@ public class World implements ScreenComponent{
 				}
 				
 				int cScreenX = (int)((x-0.5)*Chunk.getPixelLength()-x0), cScreenY = (int)((y-0.5)*Chunk.getPixelLength()-y0);
-				if (!(cScreenX <= width && cScreenX+Chunk.getPixelLength() >= 0 && cScreenY <= width && cScreenY+Chunk.getPixelLength() >= 0)) //Check that shouldn't fail!
+				if (cScreenX > width || cScreenX+Chunk.getPixelLength() < 0 || cScreenY > height || cScreenY+Chunk.getPixelLength() < 0) //Check that shouldn't fail!
 				{
 					System.out.println("WHOOPS! Check src.world.World.drawChunks()!");
 				}

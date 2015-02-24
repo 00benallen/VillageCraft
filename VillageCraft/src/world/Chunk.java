@@ -44,6 +44,26 @@ public class Chunk implements ScreenComponent{
 	{
 		BufferedImage image = new BufferedImage(Chunk.getPixelLength(), Chunk.getPixelLength(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gI = image.createGraphics();
+		
+		drawGround(gI);
+		drawBoundaries(gI);
+		
+		
+		if (village != null)
+		{
+			drawVillage(gI);
+		}
+		return image;
+	}
+	
+	public void drawGround(Graphics2D gI)
+	{
+		gI.setColor(new Color(10, 170, 10));
+		gI.fillRect(0, 0, Chunk.getPixelLength(), Chunk.getPixelLength());
+	}
+	
+	public void drawBoundaries(Graphics2D gI)
+	{
 		if (Render.drawChunkBoundaries)
 		{
 			if (village == null)
@@ -56,12 +76,11 @@ public class Chunk implements ScreenComponent{
 			}
 			gI.drawRect(0, 0, Chunk.getPixelLength()-1, Chunk.getPixelLength()-1);
 		}
-		
-		if (village != null)
-		{
-			gI.drawImage(village.draw((int)(getX()-village.getX()+village.getRelativeChunkCenter().getX()), (int)(getY()-village.getY()+village.getRelativeChunkCenter().getY())), 0, 0, Chunk.getPixelLength(), Chunk.getPixelLength(), null);
-		}
-		return image;
+	}
+	
+	public void drawVillage(Graphics2D gI)
+	{
+		gI.drawImage(village.draw((int)(getX()-village.getX()+village.getRelativeChunkCenter().getX()), (int)(getY()-village.getY()+village.getRelativeChunkCenter().getY())), 0, 0, Chunk.getPixelLength(), Chunk.getPixelLength(), null);
 	}
 	
 	public void setResources(int resources) {this.resources = resources;}
